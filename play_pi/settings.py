@@ -1,7 +1,14 @@
+import os
+
 # Django settings for play_pi project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+GPLAY_USER = "fredley@gmail.com"
+GPLAY_PASS = "xxkrvssvngbuvhpd"
+
+PROJECT_PATH = os.path.realpath(os.path.dirname(__file__)) + '/..'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -11,8 +18,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'play-pi.db',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -72,6 +79,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    PROJECT_PATH + '/static',
 )
 
 # List of finder classes that know how to find static files in
@@ -111,6 +119,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    PROJECT_PATH + '/templates',
 )
 
 INSTALLED_APPS = (
@@ -120,10 +129,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'django.contrib.admin',
+    'play_pi',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -144,6 +151,10 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler'
         }
     },
     'loggers': {
@@ -151,6 +162,11 @@ LOGGING = {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
+        },
+        'play_pi': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate':True,
         },
     }
 }
