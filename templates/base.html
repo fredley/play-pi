@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<title>Play Pi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/style.css" media="screen" />
+
+<script src="{% get_static_prefix %}js/jquery.min.js"></script>
+
+<link rel="shortcut icon" type="image/x-icon" href="{% get_static_prefix %}img/favicon.ico" />
+
+<link rel='apple-touch-icon' href='{% get_static_prefix %}img/apple-touch-icon.png' />
+
+<script>
+$(document).ready(function() {
+
+  {% block jquery %}
+  {% endblock %}
+
+});
+</script>
+
+</head>
+<body>
+
+<div id='content'>
+
+
+<div class='container'>
+
+<header class="jumbotron" id="overview">
+  <div class="container">
+    <h1>Play Pi</h1>
+    <p class="lead">Google Play Music Control Station</p>
+    <p>
+      <a class="btn btn-danger" href='' id='stop-button'>
+          <i class='icon-stop icon-white'></i> Stop
+      </a>
+      <a class="btn btn-inverse" href='' id='random-button'>
+          <i class='icon-random icon-white'></i> Random
+      </a>
+    </p>
+  </div>
+</header>
+{% block content %}
+  Hello World
+{% endblock %}
+</div>
+</div>
+
+</body>
+</html>

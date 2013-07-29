@@ -1,0 +1,147 @@
+body{
+    background: #e5e5e5;
+    color:#ccc;
+}
+a:hover{
+    text-decoration: none;
+}
+pre{
+    background: rgba(255, 255, 255, 0.2);
+    color: #F00;
+    padding: 5px;
+    border-radius: 0;
+    margin-bottom: 20px;
+}
+.jumbotron{
+    position: relative;
+    background: #f1f1f1 url('../img/banner.png') no-repeat center;
+    background-size:auto 100%;
+    padding:40px 10px;
+    margin-top: -20px;
+    margin-right: -20000px;
+    margin-left: -20000px;
+    color:#fb8823;
+    border-bottom:1px solid #ddd;
+}
+.breadcrumb{
+    background-color: transparent;
+}
+.breadcrumb a{
+    color:#555;
+    text-shadow:none;
+}
+.breadcrumb a:hover{
+    color:#fb8823;
+    text-decoration: none;
+}
+.span4{
+    float:left;
+}
+.thumbnail{
+    border:1px solid #ddd;
+    background: #f1f1f1;
+    position: relative;
+    overflow: hidden;
+    height: 200px;
+}
+.thumbnail h3{
+    color:#777;
+    font-weight: lighter;
+    text-decoration: none;
+    font-size: 1.3em;
+    line-height: 1.2em;
+}
+a.thumbnail:hover,
+a.thumbnail:focus{
+    border-color: #fb8823;
+    -webkit-box-shadow: 0 1px 4px rgba(251, 136, 35, 0.25);
+    -moz-box-shadow: 0 1px 4px rgba(251, 136, 35, 0.25);
+    box-shadow: 0 1px 4px rgba(251, 136, 35, 0.25);
+}
+.thumbnail .btn-large{
+    display: block;
+    clear:both;
+    text-align: center;
+    width:80px;
+    margin:20px auto;
+}
+.thumbnail .btn-delete{
+    position: absolute;
+    width: 5px;
+    height: 20px;
+    right: 10px;
+    top: -10px;
+    padding: 4px 16px 5px 8px;
+}
+.img-rounded{
+    border:1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    max-width:120px;
+    max-height: 120px;
+}
+
+#search-box{
+    margin-top:20px;
+    margin-left:20px;
+    width:95%;
+    border:0;
+    background: #f1f1f1;
+    border:1px solid #ddd;
+    border-radius:0;
+    padding:10px;
+    color:#555;
+}
+
+#station-form li{
+    list-style: none;
+    display: block;
+}
+#btn-submit{
+    width: 221px;
+    margin-left: 0;
+}
+
+.album-image{
+    float:left;
+    margin-right:30px;
+    margin-bottom:30px;
+}
+.album-table{
+    float:left;
+    max-width:70%;
+}
+
+@media (max-width: 767px){
+    .jumbotron {
+        padding: 40px 20px;
+        margin-top: -20px;
+        margin-right: -20px;
+        margin-left: -20px;
+    }
+    #search-box{
+        margin-left:0;
+        width:100%;
+    }
+    .album-table{
+        max-width:90%;
+    }
+}
+
+@media (max-width: 979px) and (min-width: 768px){
+    .thumbnail{
+        height: 200px;
+    }
+}
+@media (max-width: 980px) and (min-width: 1199px){
+    .thumbnail{
+        height: 230px;
+    }
+}
+@media (min-width: 1200px) {
+    #search-box{
+        margin-left:30px;
+    }
+    .thumbnail{
+        height: 230px;
+    }
+}

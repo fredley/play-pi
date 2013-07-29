@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block jquery %}
+
+{% endblock %}
+
+{% block content %}
+
+{% if view == 'album' %}
+<ul class="breadcrumb">
+  <li><a href="{% url 'home' %}">Artists</a> <span class="divider">/</span></li>
+  <li class="active">{{ name }}</li>
+</ul>
+{% endif %}
+
+<div class='row'>
+  <form class="form-search">
+    <input type="text" id="search-box" class="span12 search-query" placeholder="Filter" />
+  </form>
+</div>
+
+<ul class="thumbnails">
+
+{% for item in list %}
+
+<li class="span4">
+  <a href="{% url view item.id %}" class="thumbnail">
+    <img src="{{ item.art_url }}" alt="">
+    <h3>{{ item.name }}</h3>
+  </a>
+</li>
+
+{% endfor %}
+
+</ul>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block jquery %}
+
+{% endblock %}
+
+{% block content %}
+
+<ul class="breadcrumb">
+  <li><a href="{% url 'home' %}">Artists</a> <span class="divider">/</span></li>
+  <li><a href="{% url 'artist' album.artist.id %}">{{ album.artist.name }}</a> <span class="divider">/</span></li>
+  <li class="active">{{ album.name }}</li>
+</ul>
+
+<div class="page-header">
+  <h1>{{ album.name }} <small> {{ album.artist.name }}</small></h1>
+</div>
+
+<img src='{{ album.art_url }}' class='album-image' alt=''/>
+
+<table class="table table-striped album-table">
+  <tr><th>#</th><th>Name</th></tr>
+  {% for track in tracks %}
+    <tr><td>{{ track.track_no }}</td><td>{{ track.name }}</td></tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
