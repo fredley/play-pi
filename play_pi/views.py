@@ -28,7 +28,7 @@ def artist(request,artist_id):
 	albums = Album.objects.filter(artist=artist)
 
 	return render_to_response('index.html',
-		{'list': albums, 'view':'album', 'name': artist.name },
+		{'list': albums, 'view':'album', 'artist': artist},
 		context_instance=RequestContext(request))
 
 def album(request,album_id):
@@ -57,7 +57,7 @@ def play_album(request,album_id):
 
 	return HttpResponseRedirect(reverse('album',args=[album.id,]))
 
-def play_artist(request,artist):
+def play_artist(request,artist_id):
 	artist = Artist.objects.get(id=artist_id)
 	albums = Album.objects.filter(artist=artist)
 
