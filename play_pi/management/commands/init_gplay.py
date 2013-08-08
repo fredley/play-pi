@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-
+from django.db import connection
 from gmusicapi import Webclient
 from play_pi.settings import GPLAY_USER, GPLAY_PASS
 from play_pi.models import *
@@ -21,12 +21,12 @@ class Command(BaseCommand):
         library = api.get_all_songs()
         self.stdout.write('Data downloaded!')
         self.stdout.write('Clearing DB...')
-        for track in Track.objects.all():
-            track.delete()
-        for album in Album.objects.all():
-            album.delete()
-        for artist in Artist.objects.all():
-            artist.delete()
+        cursor = connection.cursor()
+        # This can take a long time using ORM commands on the Pi, so lets Truncate
+        cursor.execute('TRUNCATE TABLE "{0}"'.format(Track._meta.db_table))
+        cursor.execute('TRUNCATE TABLE "{0}"'.format(Album._meta.db_table))
+        cursor.execute('TRUNCATE TABLE "{0}"'.format(Artist._meta.db_table))
+        cursor.execute('TRUNCATE TABLE "{0}"'.format(Playlist._meta.db_table))
         self.stdout.write('Parsing new data...')
 
         # Easier to keep track of who we've seen like this...
@@ -71,3 +71,26 @@ class Command(BaseCommand):
             except:
                 track.track_no = 0
             track.save()
+
+        self.stdout.write('All tracks saved!')
+        self.stdout.write('Getting Playlists...')
+        playlists = api.get_all_playlist_ids(auto=False, user=True)
+        self.stdout.write('Saving playlists...')
+        for name in playlists['user']:
+            for pid in playlists['user'][name]:
+                p = Playlist()
+                p.pid = pid
+                p.name = name
+                p.save()
+
+        for playlist in Playlist.objects.all():
+            self.stdout.write('Getting playlist contents for ' + playlist.name)
+            songs = api.get_playlist_songs(playlist.pid)
+            for song in songs:
+                track = Track.objects.get(stream_id=song['id'])
+                pc = PlaylistConnection()
+                pc.playlist = playlist
+                pc.track = track
+                pc.save()
+
+        self.stdout.write('Library saved!')

@@ -8,27 +8,24 @@
 
 <ul class="breadcrumb">
   <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
-  <li><a href="{% url 'artist' album.artist.id %}">{{ album.artist.name }}</a> <span class="divider">/</span></li>
-  <li class="active">{{ album.name }}</li>
+  <li><a href="{% url 'playlists' %}">Playlists</a> <span class="divider">/</span></li>
+  <li class="active">{{ playlist.name }}</li>
 </ul>
 
 <div class="page-header">
-  <h1>{{ album.name }} <small> {{ album.artist.name }}</small></h1>
+	  <h1>{{ playlist.name }}</h1>
 </div>
 
-<img src='{{ album.art_url }}' class='album-image' alt=''/>
-<a id='play-link' href='{% url "play_album" album.id %}'>▶ Play Album</a>
+<a id='play-link' class='play-playlist' href='{% url "play_playlist" playlist.id %}'>▶ Play Playlist</a>
 
 <table class="table table-striped album-table">
   <tr>
   	<th class='play-col'></th>
-  	<th class='num-col'>#</th>
   	<th>Name</th>
   </tr>
   {% for track in tracks %}
     <tr>
     	<td class='play-col'><a href='{% url "play_track" track.id %}'>▶</a></td>
-    	<td class='num-col'>{{ track.track_no }}</td>
     	<td>{{ track.name }}</td>
     </tr>
   {% endfor %}

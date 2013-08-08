@@ -8,7 +8,7 @@
 
 {% if view == 'album' %}
 <ul class="breadcrumb">
-  <li><a href="{% url 'home' %}">Artists</a> <span class="divider">/</span></li>
+  <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
   <li class="active">{{ artist.name }}</li>
 </ul>
 
@@ -26,7 +26,7 @@
 {% for item in list %}
 
 <li class="span4">
-  <a href="{% url view item.id %}" class="thumbnail">
+  <a href="{% url view item.id %}" class="thumbnail" name="{{ item.name }}">
     <img src="{{ item.art_url }}" alt="">
     <h3>{{ item.name }}</h3>
   </a>

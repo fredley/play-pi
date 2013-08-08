@@ -19,8 +19,15 @@
 <script>
 $(document).ready(function() {
 
-  {% block jquery %}
-  {% endblock %}
+  $('#search-box').keyup(function() {
+    $('.thumbnail').each(function(){
+        if($(this).attr('name').toLowerCase().indexOf($('#search-box').val().toLowerCase()) == -1){
+            $(this).hide();
+        }else{
+            $(this).show();
+        }
+    });
+});
 
 });
 </script>
@@ -43,6 +50,9 @@ $(document).ready(function() {
       </a>
       <a class="btn btn-inverse" href='' id='random-button'>
           <i class='icon-random icon-white'></i> Random
+      </a>
+      <a class="btn btn-inverse" href='{% url "playlists" %}' id='playlists-button'>
+          <i class='icon-list icon-white'></i> Playlists
       </a>
     </p>
   </div>

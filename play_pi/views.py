@@ -32,6 +32,19 @@ def artist(request,artist_id):
 		{'list': albums, 'view':'album', 'artist': artist},
 		context_instance=RequestContext(request))
 
+def playlists(request):
+	playlists = Playlist.objects.all()
+	return render_to_response('index.html',
+		{'list': playlists, 'view':'playlist'},
+		context_instance=RequestContext(request))
+
+def playlist(request,playlist_id):
+	playlist = Playlist.objects.get(id=playlist_id)
+	tracks = [pc.track for pc in PlaylistConnection.objects.filter(playlist=playlist)]
+	return render_to_response('playlist.html',
+		{'playlist': playlist, 'tracks': tracks},
+		context_instance=RequestContext(request))
+
 def album(request,album_id):
 	album = Album.objects.get(id=album_id)
 	tracks = Track.objects.filter(album=album).order_by('track_no')
@@ -60,6 +73,15 @@ def play_artist(request,artist_id):
 			urls.append('http://0.0.0.0:8080/get_stream/' + str(track.id) + '/')
 	mpd_play(urls)
 	return HttpResponseRedirect(reverse('artist',args=[artist.id,]))
+
+def play_playlist(request,playlist_id):
+	playlist = Playlist.objects.get(id=playlist_id)
+	tracks = [pc.track for pc in PlaylistConnection.objects.filter(playlist=playlist)]
+	urls = []
+	for track in tracks:
+		urls.append('http://0.0.0.0:8080/get_stream/' + str(track.id) + '/')
+	mpd_play(urls)
+	return HttpResponseRedirect(reverse('playlist',args=[playlist.id,]))
 
 def get_stream(request,track_id):
 	track = Track.objects.get(id=track_id)

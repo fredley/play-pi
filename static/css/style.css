@@ -75,6 +75,9 @@ a.thumbnail:focus{
 #play-link.play-artist{
     margin-bottom:0;
 }
+#play-link.play-playlist{
+    margin-left:0;
+}
 .play-col,
 .num-col {
     width:30px;
