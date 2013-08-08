@@ -33,7 +33,7 @@ def artist(request,artist_id):
 
 def album(request,album_id):
 	album = Album.objects.get(id=album_id)
-	tracks = Track.objects.filter(album=album)
+	tracks = Track.objects.filter(album=album).order_by('track_no')
 
 	return render_to_response('album.html',
 		{'album': album, 'tracks': tracks},
@@ -41,7 +41,7 @@ def album(request,album_id):
 
 def play_album(request,album_id):
 	album = Album.objects.get(id=album_id)
-	tracks = Track.objects.filter(album=album)
+	tracks = Track.objects.filter(album=album).order_by('track_no')
 
 	try:
 		client = mpd.MPDClient()
@@ -81,3 +81,14 @@ def play_track(request,track_id):
 		pass
 	return HttpResponseRedirect(reverse('album',args=track.album.id))
 
+def stop(request):
+    try:
+        client = mpd.MPDClient()
+        client.connect("localhost", 6600)
+        client.clear()
+        client.stop()
+        client.disconnect()
+    except:
+        pass
+
+    return HttpResponseRedirect(reverse('home'))

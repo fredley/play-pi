@@ -10,5 +10,6 @@ urlpatterns = patterns('',
     url(r'^play/track/(?P<track_id>\d+)/$', 'play_pi.views.play_track', name='play_track'),
     url(r'^play/album/(?P<album_id>\d+)/$', 'play_pi.views.play_album', name='play_album'),
     url(r'^get_stream/(?P<track_id>\d+)/$', 'play_pi.views.get_stream', name='get_stream'),
+    url(r'^stop/$', 'play_pi.views.stop', name='stop'),
     url(r'^admin/', include(admin.site.urls)),
 )
