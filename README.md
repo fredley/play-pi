@@ -2,6 +2,8 @@
 
 A frontend for a [Google Play Music](http://play.google.com/music/) Pi Jukebox. Play-pi will provide a web-frontend that can be used to browse and play your Google Music library.
 
+![Screenshot](http://i.imgur.com/2UV2Dqw.png)
+
 ###Setup/Installation:
 
 * Not covered in this guide: Setting up ssh/wireless/sound card. These topics are covered in this [lifehacker guide](http://lifehacker.com/5978594/turn-a-raspberry-pi-into-an-airplay-receiver-for-streaming-music-in-your-living-room).
