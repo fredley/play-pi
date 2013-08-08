@@ -2,10 +2,11 @@ from gmusicapi import Webclient
 import mpd
 from django.core.cache import cache
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils import simplejson
 
 from play_pi import settings
 from play_pi.models import *
@@ -109,7 +110,7 @@ def random(request):
 	client = mpd.MPDClient()
 	client.connect("localhost", 6600)
 	status = client.status()
-	result = client.random( (-1 * int(status['random'])) + 1 )
+	client.random( (-1 * int(status['random'])) + 1 )
 	client.disconnect()
 	return HttpResponseRedirect(reverse('home'))
 
@@ -117,10 +118,24 @@ def repeat(request):
 	client = mpd.MPDClient()
 	client.connect("localhost", 6600)
 	status = client.status()
-	result = client.repeat( (-1 * int(status['repeat'])) + 1 )
+	client.repeat( (-1 * int(status['repeat'])) + 1 )
 	logger.debug(status)
 	client.disconnect()
 	return HttpResponseRedirect(reverse('home'))
+
+def ajax(request,method):
+	client = mpd.MPDClient()
+	client.connect("localhost", 6600)
+	status = client.status()
+	if method == 'random':
+		client.random( (-1 * int(status['random'])) + 1 )
+	elif method == 'repeat':
+		client.repeat( (-1 * int(status['repeat'])) + 1 )
+	elif method == 'stop':
+		client.stop()
+	return_data = client.status()
+	client.disconnect();
+	return HttpResponse(simplejson.dumps(return_data), 'application/javascript')
 
 def get_gplay_url(stream_id):
 	url = API.get_stream_urls(stream_id)[0]

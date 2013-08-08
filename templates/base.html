@@ -27,7 +27,30 @@ $(document).ready(function() {
             $(this).show();
         }
     });
-});
+  });
+
+  function ajax(toggle){
+    $.ajax("/ajax/"+toggle+"/",{ type: "GET" }).always(function (response) {
+      results = JSON.parse(response['responseText']);
+      if(toggle != "stop"){
+        $("#"+toggle+"-button").toggleClass('btn-highlight');
+      }
+    });
+    return false;
+  }
+
+  $('#random-button').click(function(e){
+      e.preventDefault();
+      ajax("random");
+  });
+  $('#stop-button').click(function(e){
+      e.preventDefault();
+      ajax("stop");
+  });
+  $('#repeat-button').click(function(e){
+      e.preventDefault();
+      ajax("repeat");
+  });
 
 });
 </script>
