@@ -2,7 +2,7 @@
 
 A frontend for a [Google Play Music](http://play.google.com/music/) Pi Jukebox. Play-pi will provide a web-frontend that can be used to browse and play your Google Music library.
 
-![Screenshot](http://i.imgur.com/2UV2Dqw.png)
+![Screenshot](http://i.imgur.com/Ar4dqoN.png)
 
 ###Setup/Installation:
 
@@ -18,6 +18,10 @@ There are [futher instructions for setting up/testing mpc](http://www.gmpa.it/it
 * Now clone this repository:
 `git clone git://github.com/fredley/play-pi.git`
 `cd play-pi`
+* Create a file called `local_settings.py` in the same folder as `settings.py`. Add the following lines:
+`GPLAY_USER="you@gmail.com"`
+`GPLAY_PASS="your-password"`
+It's highly recommended you use an [application specific password](https://support.google.com/accounts/answer/185833?hl=en) for this.
 * Now set up the Django app with the following commands. This will create the database:
 `./manage.py syncdb`
 During this step you will be asked for a superuser name and password. You can use these to access the admin should you want to.
