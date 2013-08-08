@@ -55,7 +55,27 @@ def play_album(request,album_id):
 		logger.debug('something went wrong!')
 		pass
 
-	return HttpResponseRedirect(reverse('album',args=[track.album.id,]))
+	return HttpResponseRedirect(reverse('album',args=[album.id,]))
+
+def play_artist(request,artist):
+	artist = Artist.objects.get(id=artist_id)
+	albums = Album.objects.filter(artist=artist)
+
+	try:
+		client = mpd.MPDClient()
+		client.connect("localhost", 6600)
+		client.clear()
+		for album in albums:
+			tracks = Track.objects.filter(album=album).order_by('track_no')
+			for track in tracks:
+				client.add('http://0.0.0.0:8080/get_stream/' + str(track.id) + '/')
+		client.play()
+		client.disconnect()
+	except:
+		logger.debug('something went wrong!')
+		pass
+
+	return HttpResponseRedirect(reverse('artist',args=[artist.id,]))
 
 def get_stream(request,track_id):
 	track = Track.objects.get(id=track_id)
