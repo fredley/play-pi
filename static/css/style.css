@@ -34,12 +34,19 @@ a:hover{
 .span4{
     float:left;
 }
+div.thumbnails{
+    padding-left:20px;
+}
 .thumbnail{
     border:1px solid #ddd;
     background: #f1f1f1;
     position: relative;
     overflow: hidden;
     height: 200px;
+    min-width:220px;
+    max-width:30%;
+    margin:0 11px 10px 0;
+    float:left;
 }
 .thumbnail h3{
     color:#777;
@@ -58,7 +65,7 @@ a.thumbnail:focus{
 #search-box{
     margin-top:20px;
     margin-left:20px;
-    width:95%;
+    width:92%;
     border:0;
     background: #f1f1f1;
     border:1px solid #ddd;
@@ -106,6 +113,10 @@ a.thumbnail:focus{
     }
     .album-table{
         max-width:90%;
+    }
+    .thumbnail{
+        max-width: 767px;
+        width:90%;
     }
     .thumbnail img{
         height: 170px;

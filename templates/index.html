@@ -21,19 +21,17 @@
   </form>
 </div>
 
-<ul class="thumbnails">
+<div class="thumbnails">
 
 {% for item in list %}
 
-<li class="span4">
-  <a href="{% url view item.id %}" class="thumbnail" name="{{ item.name }}">
-    <img src="{{ item.art_url }}" alt="">
-    <h3>{{ item.name }}</h3>
-  </a>
-</li>
+<a href="{% url view item.id %}" class="thumbnail" name="{{ item.name }}">
+	<img src="{{ item.art_url }}" alt="">
+	<h3>{{ item.name }}</h3>
+</a>
 
 {% endfor %}
 
-</ul>
+</div>
 
 {% endblock %}

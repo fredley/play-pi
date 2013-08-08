@@ -48,8 +48,8 @@ $(document).ready(function() {
       <a class="btn btn-danger" href='{% url "stop" %}' id='stop-button'>
           <i class='icon-stop icon-white'></i> Stop
       </a>
-      <a class="btn btn-inverse" href='' id='random-button'>
-          <i class='icon-random icon-white'></i> Random
+      <a class="btn btn-inverse" href='{% url "home" %}' id='artists-button'>
+          <i class='icon-user icon-white'></i> Artists
       </a>
       <a class="btn btn-inverse" href='{% url "playlists" %}' id='playlists-button'>
           <i class='icon-list icon-white'></i> Playlists
