@@ -16,12 +16,13 @@
   <h1>{{ album.name }} <small> {{ album.artist.name }}</small></h1>
 </div>
 
-<a href='{% url "play_album" album.id %}'><img src='{{ album.art_url }}' class='album-image' alt=''/></a>
+<img src='{{ album.art_url }}' class='album-image' alt=''/>
 
+<a id='play-link' href='{% url "play_album" album.id %}'>▶ Play Album</a>
 <table class="table table-striped album-table">
-  <tr><th>#</th><th>Name</th></tr>
+  <tr><th class='play-col'></th><th class='num-col'>#</th><th>Name</th></tr>
   {% for track in tracks %}
-    <tr><td>{{ track.track_no }}</td><td><a href='{% url "play_track" track.id %}'>{{ track.name }}</a></td></tr>
+    <tr><td class='play-col'><a href='{% url "play_track" track.id %}'>▶</a></td><td class='num-col'>{{ track.track_no }}</td><td>{{ track.name }}</td></tr>
   {% endfor %}
 </table>
 

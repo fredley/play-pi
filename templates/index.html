@@ -9,8 +9,10 @@
 {% if view == 'album' %}
 <ul class="breadcrumb">
   <li><a href="{% url 'home' %}">Artists</a> <span class="divider">/</span></li>
-  <li class="active">{{ name }}</li>
+  <li class="active">{{ artist.name }}</li>
 </ul>
+
+<a id='play-link' class='play-artist' href='{% url "play_artist" artist.id %}'>▶ Play Artist</a>
 {% endif %}
 
 <div class='row'>

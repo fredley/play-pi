@@ -2,19 +2,16 @@ body{
     background: #e5e5e5;
     color:#ccc;
 }
-a:hover{
-    text-decoration: none;
+a{
+    color:#fb8823;
 }
-pre{
-    background: rgba(255, 255, 255, 0.2);
-    color: #F00;
-    padding: 5px;
-    border-radius: 0;
-    margin-bottom: 20px;
+a:hover{
+    color:#FFA659;
+    text-decoration: none;
 }
 .jumbotron{
     position: relative;
-    background: #f1f1f1 url('../img/banner.png') no-repeat center;
+    background: #f1f1f1;
     background-size:auto 100%;
     padding:40px 10px;
     margin-top: -20px;
@@ -58,28 +55,6 @@ a.thumbnail:focus{
     -moz-box-shadow: 0 1px 4px rgba(251, 136, 35, 0.25);
     box-shadow: 0 1px 4px rgba(251, 136, 35, 0.25);
 }
-.thumbnail .btn-large{
-    display: block;
-    clear:both;
-    text-align: center;
-    width:80px;
-    margin:20px auto;
-}
-.thumbnail .btn-delete{
-    position: absolute;
-    width: 5px;
-    height: 20px;
-    right: 10px;
-    top: -10px;
-    padding: 4px 16px 5px 8px;
-}
-.img-rounded{
-    border:1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
-    max-width:120px;
-    max-height: 120px;
-}
-
 #search-box{
     margin-top:20px;
     margin-left:20px;
@@ -91,16 +66,19 @@ a.thumbnail:focus{
     padding:10px;
     color:#555;
 }
-
-#station-form li{
-    list-style: none;
-    display: block;
+#play-link{
+    float:left;
+    width:50%;
+    font-size:20px;
+    margin-bottom:30px;
 }
-#btn-submit{
-    width: 221px;
-    margin-left: 0;
+#play-link.play-artist{
+    margin-bottom:0;
 }
-
+.play-col,
+.num-col {
+    width:30px;
+}
 .album-image{
     float:left;
     margin-right:30px;
@@ -109,6 +87,7 @@ a.thumbnail:focus{
 .album-table{
     float:left;
     max-width:70%;
+    color:#555;
 }
 
 @media (max-width: 767px){
@@ -124,6 +103,9 @@ a.thumbnail:focus{
     }
     .album-table{
         max-width:90%;
+    }
+    .thumbnail img{
+        height: 170px;
     }
 }
 
