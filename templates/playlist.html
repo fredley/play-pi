@@ -16,6 +16,7 @@
 	  <h1>{{ playlist.name }}</h1>
 </div>
 
+<img src='{{ playlist.art_url }}' class='album-image' alt=''/>
 <a id='play-link' class='play-playlist' href='{% url "play_playlist" playlist.id %}'>▶ Play Playlist</a>
 
 <table class="table table-striped album-table">

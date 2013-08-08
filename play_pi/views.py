@@ -95,15 +95,32 @@ def play_track(request,track_id):
 	return HttpResponseRedirect(reverse('album',args=track.album.id))
 
 def stop(request):
-    try:
-        client = mpd.MPDClient()
-        client.connect("localhost", 6600)
-        client.clear()
-        client.stop()
-        client.disconnect()
-    except:
-        pass
-    return HttpResponseRedirect(reverse('home'))
+	try:
+		client = mpd.MPDClient()
+		client.connect("localhost", 6600)
+		client.clear()
+		client.stop()
+		client.disconnect()
+	except:
+		pass
+	return HttpResponseRedirect(reverse('home'))
+
+def random(request):
+	client = mpd.MPDClient()
+	client.connect("localhost", 6600)
+	status = client.status()
+	result = client.random( (-1 * int(status['random'])) + 1 )
+	client.disconnect()
+	return HttpResponseRedirect(reverse('home'))
+
+def repeat(request):
+	client = mpd.MPDClient()
+	client.connect("localhost", 6600)
+	status = client.status()
+	result = client.repeat( (-1 * int(status['repeat'])) + 1 )
+	logger.debug(status)
+	client.disconnect()
+	return HttpResponseRedirect(reverse('home'))
 
 def get_gplay_url(stream_id):
 	url = API.get_stream_urls(stream_id)[0]

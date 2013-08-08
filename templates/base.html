@@ -48,13 +48,19 @@ $(document).ready(function() {
       <a class="btn btn-danger" href='{% url "stop" %}' id='stop-button'>
           <i class='icon-stop icon-white'></i> Stop
       </a>
-      <a class="btn btn-inverse" href='{% url "home" %}' id='artists-button'>
-          <i class='icon-user icon-white'></i> Artists
+      <a class="btn {% if mpd_status.random == '1' %}btn-highlight{% endif %} btn-inverse" href='{% url "random" %}' id='random-button'>
+          <i class='icon-random icon-white'></i> Random
       </a>
-      <a class="btn btn-inverse" href='{% url "playlists" %}' id='playlists-button'>
-          <i class='icon-list icon-white'></i> Playlists
+      <a class="btn {% if mpd_status.repeat == '1' %}btn-highlight{% endif %} btn-inverse" href='{% url "repeat" %}' id='repeat-button'>
+          <i class='icon-repeat icon-white'></i> Repeat
       </a>
     </p>
+    <a class='nav-link' href='{% url "home" %}'>
+        <i class='icon-user'></i> Artists
+    </a>
+    <a class='nav-link' href='{% url "playlists" %}'>
+        <i class='icon-list'></i> Playlists
+    </a>
   </div>
 </header>
 {% block content %}

@@ -24,6 +24,14 @@ class Playlist(models.Model):
 	name = models.CharField(max_length=200)
 	pid = models.CharField(max_length=200)
 
+	def get_art(self):
+		pc = PlaylistConnection.objects.filter(playlist=self)[0]
+		track = pc.track
+		artist = track.artist
+		return artist.art_url
+
+	art_url = property(get_art)
+
 
 class PlaylistConnection(models.Model):
 	track = models.ForeignKey(Track)
