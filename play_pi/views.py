@@ -1,5 +1,6 @@
 from gmusicapi import Webclient
 import mpd
+from django.core.cache import cache
 
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -8,7 +9,7 @@ from django.template import RequestContext
 
 from play_pi import settings
 from play_pi.models import *
-from play_pi.settings import GPLAY_USER, GPLAY_PASS
+from play_pi.settings import API
 
 import logging
 logger = logging.getLogger('play_pi')
@@ -42,63 +43,33 @@ def album(request,album_id):
 def play_album(request,album_id):
 	album = Album.objects.get(id=album_id)
 	tracks = Track.objects.filter(album=album).order_by('track_no')
-
-	try:
-		client = mpd.MPDClient()
-		client.connect("localhost", 6600)
-		client.clear()
-		for track in tracks:
-			client.add('http://0.0.0.0:8080/get_stream/' + str(track.id) + '/')
-		client.play()
-		client.disconnect()
-	except:
-		logger.debug('something went wrong!')
-		pass
+	urls = []
+	for track in tracks:
+		urls.append('http://0.0.0.0:8080/get_stream/' + str(track.id) + '/')
+	mpd_play(urls)
 
 	return HttpResponseRedirect(reverse('album',args=[album.id,]))
 
 def play_artist(request,artist_id):
 	artist = Artist.objects.get(id=artist_id)
 	albums = Album.objects.filter(artist=artist)
-
-	try:
-		client = mpd.MPDClient()
-		client.connect("localhost", 6600)
-		client.clear()
-		for album in albums:
-			tracks = Track.objects.filter(album=album).order_by('track_no')
-			for track in tracks:
-				client.add('http://0.0.0.0:8080/get_stream/' + str(track.id) + '/')
-		client.play()
-		client.disconnect()
-	except:
-		logger.debug('something went wrong!')
-		pass
-
+	urls = []
+	for album in albums:
+		tracks = Track.objects.filter(album=album).order_by('track_no')
+		for track in tracks:
+			urls.append('http://0.0.0.0:8080/get_stream/' + str(track.id) + '/')
+	mpd_play(urls)
 	return HttpResponseRedirect(reverse('artist',args=[artist.id,]))
 
 def get_stream(request,track_id):
 	track = Track.objects.get(id=track_id)
-	api = Webclient()
-	api.login(GPLAY_USER,GPLAY_PASS)
-	url = api.get_stream_urls(track.stream_id)[0]
+	url = get_gplay_url(track.stream_id)
 	return HttpResponseRedirect(url)
 
 def play_track(request,track_id):
 	track = Track.objects.get(id=track_id)
-	api = Webclient()
-	api.login(GPLAY_USER,GPLAY_PASS)
-	url = api.get_stream_urls(track.stream_id)[0]
-
-	try:
-		client = mpd.MPDClient()
-		client.connect("localhost", 6600)
-		client.clear()
-		client.add(url)
-		client.play()
-		client.disconnect()
-	except:
-		pass
+	url = get_gplay_url(track.stream_id)
+	mpd_play([url,])
 	return HttpResponseRedirect(reverse('album',args=track.album.id))
 
 def stop(request):
@@ -110,5 +81,20 @@ def stop(request):
         client.disconnect()
     except:
         pass
-
     return HttpResponseRedirect(reverse('home'))
+
+def get_gplay_url(stream_id):
+	url = API.get_stream_urls(stream_id)[0]
+	return url
+
+def mpd_play(urls):
+	try:
+		client = mpd.MPDClient()
+		client.connect("localhost", 6600)
+		client.clear()
+		for url in urls:
+			client.add(url)
+		client.play()
+		client.disconnect()
+	except:
+		pass
