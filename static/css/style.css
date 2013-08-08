@@ -11,7 +11,7 @@ a:hover{
 }
 .jumbotron{
     position: relative;
-    background: #f1f1f1;
+    background: #f1f1f1 url('../img/banner.png') center top no-repeat;
     background-size:auto 100%;
     padding:40px 10px;
     margin-top: -20px;
