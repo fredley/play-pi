@@ -48,11 +48,11 @@ def play_album(request,album_id):
 		client.connect("localhost", 6600)
 		client.clear()
 		for track in tracks:
-			logger.debug('adding track: ' + track.id)
-			client.add('http://0.0.0.0:8080/get_stream/' + track.id + '/')
+			client.add('http://0.0.0.0:8080/get_stream/' + str(track.id) + '/')
 		client.play()
 		client.disconnect()
 	except:
+		logger.debug('something went wrong!')
 		pass
 
 	return HttpResponseRedirect(reverse('album',args=[track.album.id,]))
@@ -62,7 +62,6 @@ def get_stream(request,track_id):
 	api = Webclient()
 	api.login(GPLAY_USER,GPLAY_PASS)
 	url = api.get_stream_urls(track.stream_id)[0]
-	logger.debug('Passing through ' + track.name + ' to ' + url)
 	return HttpResponseRedirect(url)
 
 def play_track(request,track_id):
@@ -70,7 +69,6 @@ def play_track(request,track_id):
 	api = Webclient()
 	api.login(GPLAY_USER,GPLAY_PASS)
 	url = api.get_stream_urls(track.stream_id)[0]
-	logger.debug('playing: ' + url)
 
 	try:
 		client = mpd.MPDClient()
