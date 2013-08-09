@@ -23,10 +23,11 @@ class Command(BaseCommand):
         self.stdout.write('Clearing DB...')
         cursor = connection.cursor()
         # This can take a long time using ORM commands on the Pi, so lets Truncate
-        cursor.execute('TRUNCATE TABLE "{0}"'.format(Track._meta.db_table))
-        cursor.execute('TRUNCATE TABLE "{0}"'.format(Album._meta.db_table))
-        cursor.execute('TRUNCATE TABLE "{0}"'.format(Artist._meta.db_table))
-        cursor.execute('TRUNCATE TABLE "{0}"'.format(Playlist._meta.db_table))
+        cursor.execute('DELETE FROM ' + Track._meta.db_table)
+        cursor.execute('DELETE FROM ' + Album._meta.db_table)
+        cursor.execute('DELETE FROM ' + Artist._meta.db_table)
+        cursor.execute('DELETE FROM ' + Playlist._meta.db_table)
+        cursor.execute('DELETE FROM ' + PlaylistConnection._meta.db_table)
         self.stdout.write('Parsing new data...')
 
         # Easier to keep track of who we've seen like this...
