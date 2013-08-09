@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.utils import simplejson
 
 from play_pi.models import *
-from play_pi.settings import GPLAY_USER, GPLAY_PASS
+from play_pi.settings import GPLAY_USER, GPLAY_PASS, SITE_ROOT
 
 import logging
 logger = logging.getLogger('play_pi')
@@ -23,9 +23,7 @@ client.connect("localhost", 6600)
 def home(request):
 	if GPLAY_USER == "" or GPLAY_PASS == "":
 		return render_to_response('error.html', context_instance=RequestContext(request))
-
 	artists = Artist.objects.all().order_by('name')
-
 	return render_to_response('index.html',
 		{'list': artists, 'view':'artist'},
 		context_instance=RequestContext(request))
@@ -33,7 +31,6 @@ def home(request):
 def artist(request,artist_id):
 	artist = Artist.objects.get(id=artist_id)
 	albums = Album.objects.filter(artist=artist)
-
 	return render_to_response('index.html',
 		{'list': albums, 'view':'album', 'artist': artist},
 		context_instance=RequestContext(request))
@@ -54,7 +51,6 @@ def playlist(request,playlist_id):
 def album(request,album_id):
 	album = Album.objects.get(id=album_id)
 	tracks = Track.objects.filter(album=album).order_by('track_no')
-
 	return render_to_response('album.html',
 		{'album': album, 'tracks': tracks},
 		context_instance=RequestContext(request))
@@ -64,9 +60,8 @@ def play_album(request,album_id):
 	tracks = Track.objects.filter(album=album).order_by('track_no')
 	urls = []
 	for track in tracks:
-		urls.append(reverse('get_stream',args=str(track.id)))
+		urls.append(reverse('get_stream',args=[track.id,]))
 	mpd_play(urls)
-
 	return HttpResponseRedirect(reverse('album',args=[album.id,]))
 
 def play_artist(request,artist_id):
@@ -76,7 +71,7 @@ def play_artist(request,artist_id):
 	for album in albums:
 		tracks = Track.objects.filter(album=album).order_by('track_no')
 		for track in tracks:
-			urls.append(reverse('get_stream',args=str(track.id)))
+			urls.append(reverse('get_stream',args=[track.id,]))
 	mpd_play(urls)
 	return HttpResponseRedirect(reverse('artist',args=[artist.id,]))
 
@@ -85,7 +80,7 @@ def play_playlist(request,playlist_id):
 	tracks = [pc.track for pc in PlaylistConnection.objects.filter(playlist=playlist)]
 	urls = []
 	for track in tracks:
-		urls.append(reverse('get_stream',args=str(track.id)))
+		urls.append(reverse('get_stream',args=[track.id,]))
 	mpd_play(urls)
 	return HttpResponseRedirect(reverse('playlist',args=[playlist.id,]))
 
@@ -144,7 +139,7 @@ def mpd_play(urls):
 	client = get_client()
 	client.clear()
 	for url in urls:
-		client.add(url)
+		client.add(SITE_ROOT + url)
 	client.play()
 
 def get_client():
