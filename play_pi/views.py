@@ -93,7 +93,7 @@ def play_track(request,track_id):
 	track = Track.objects.get(id=track_id)
 	url = get_gplay_url(track.stream_id)
 	mpd_play([url,])
-	return HttpResponseRedirect(reverse('album',args=track.album.id))
+	return HttpResponseRedirect(reverse('album',args=[track.album.id,]))
 
 def stop(request):
 	client = get_client()
