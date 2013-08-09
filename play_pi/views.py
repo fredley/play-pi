@@ -64,7 +64,7 @@ def play_album(request,album_id):
 	tracks = Track.objects.filter(album=album).order_by('track_no')
 	urls = []
 	for track in tracks:
-		urls.append('http://0.0.0.0:8080/get_stream/' + str(track.id) + '/')
+		urls.append(reverse('get_stream',args=str(track.id)))
 	mpd_play(urls)
 
 	return HttpResponseRedirect(reverse('album',args=[album.id,]))
@@ -76,7 +76,7 @@ def play_artist(request,artist_id):
 	for album in albums:
 		tracks = Track.objects.filter(album=album).order_by('track_no')
 		for track in tracks:
-			urls.append('http://0.0.0.0:8080/get_stream/' + str(track.id) + '/')
+			urls.append(reverse('get_stream',args=str(track.id)))
 	mpd_play(urls)
 	return HttpResponseRedirect(reverse('artist',args=[artist.id,]))
 
@@ -85,7 +85,7 @@ def play_playlist(request,playlist_id):
 	tracks = [pc.track for pc in PlaylistConnection.objects.filter(playlist=playlist)]
 	urls = []
 	for track in tracks:
-		urls.append('http://0.0.0.0:8080/get_stream/' + str(track.id) + '/')
+		urls.append(reverse('get_stream',args=str(track.id)))
 	mpd_play(urls)
 	return HttpResponseRedirect(reverse('playlist',args=[playlist.id,]))
 
