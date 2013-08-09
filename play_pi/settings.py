@@ -181,6 +181,3 @@ try:
     from local_settings import *
 except ImportError:
     pass
-
-API = Webclient()
-API.login(GPLAY_USER,GPLAY_PASS)

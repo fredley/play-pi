@@ -8,15 +8,20 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import simplejson
 
-from play_pi import settings
 from play_pi.models import *
-from play_pi.settings import API
+from play_pi.settings import GPLAY_USER, GPLAY_PASS
 
 import logging
 logger = logging.getLogger('play_pi')
 
+api = Webclient()
+api.login(GPLAY_USER,GPLAY_PASS)
+
+client = mpd.MPDClient()
+client.connect("localhost", 6600)
+
 def home(request):
-	if settings.GPLAY_USER == "" or settings.GPLAY_PASS == "":
+	if GPLAY_USER == "" or GPLAY_PASS == "":
 		return render_to_response('error.html', context_instance=RequestContext(request))
 
 	artists = Artist.objects.all().order_by('name')
@@ -96,36 +101,26 @@ def play_track(request,track_id):
 	return HttpResponseRedirect(reverse('album',args=track.album.id))
 
 def stop(request):
-	try:
-		client = mpd.MPDClient()
-		client.connect("localhost", 6600)
-		client.clear()
-		client.stop()
-		client.disconnect()
-	except:
-		pass
+	client = get_client()
+	client.clear()
+	client.stop()
 	return HttpResponseRedirect(reverse('home'))
 
 def random(request):
-	client = mpd.MPDClient()
-	client.connect("localhost", 6600)
+	client = get_client()
 	status = client.status()
 	client.random( (-1 * int(status['random'])) + 1 )
-	client.disconnect()
 	return HttpResponseRedirect(reverse('home'))
 
 def repeat(request):
-	client = mpd.MPDClient()
-	client.connect("localhost", 6600)
+	client = get_client()
 	status = client.status()
 	client.repeat( (-1 * int(status['repeat'])) + 1 )
 	logger.debug(status)
-	client.disconnect()
 	return HttpResponseRedirect(reverse('home'))
 
 def ajax(request,method):
-	client = mpd.MPDClient()
-	client.connect("localhost", 6600)
+	client = get_client()
 	status = client.status()
 	if method == 'random':
 		client.random( (-1 * int(status['random'])) + 1 )
@@ -134,21 +129,28 @@ def ajax(request,method):
 	elif method == 'stop':
 		client.stop()
 	return_data = client.status()
-	client.disconnect();
 	return HttpResponse(simplejson.dumps(return_data), 'application/javascript')
 
 def get_gplay_url(stream_id):
-	url = API.get_stream_urls(stream_id)[0]
+	global api
+	try:
+		url = api.get_stream_urls(stream_id)[0]
+	except:
+		api.login(GPLAY_USER,GPLAY_PASS)
+		url = api.get_stream_urls(stream_id)[0]
 	return url
 
 def mpd_play(urls):
+	client = get_client()
+	client.clear()
+	for url in urls:
+		client.add(url)
+	client.play()
+
+def get_client():
+	global client
 	try:
-		client = mpd.MPDClient()
-		client.connect("localhost", 6600)
-		client.clear()
-		for url in urls:
-			client.add(url)
-		client.play()
-		client.disconnect()
+		client.status()
 	except:
-		pass
+		client.connect("localhost", 6600)
+	return client
