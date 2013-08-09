@@ -37,18 +37,26 @@ class Command(BaseCommand):
         for song in library:
             track = Track()
 
-            if song['albumArtist'] not in artists:
+            if song['albumArtist'] == "":
+                if song['artist'] == "":
+                    a = "Unknown Artist"
+                else:
+                    a = song['artist']
+            else:
+                a = song['albumArtist']
+
+            if a not in artists:
                 artist = Artist()
-                artist.name = song['albumArtist']
+                artist.name = a
                 try:
                     artist.art_url = song['artistImageBaseUrl']
                 except:
                     artist.art_url = ""
                 artist.save()
-                artists.append(song['albumArtist'])
-                self.stdout.write('Added artist: '+song['albumArtist'])
+                artists.append(a)
+                self.stdout.write('Added artist: '+ a)
             else:
-                artist = Artist.objects.get(name=song['albumArtist'])
+                artist = Artist.objects.get(name=a)
             track.artist = artist
 
             if song['album'] not in albums:
