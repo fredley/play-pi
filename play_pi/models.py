@@ -7,10 +7,14 @@ class Artist(models.Model):
 
 
 class Album(models.Model):
-	name = models.CharField(max_length=200, unique=True)
-	art_url = models.CharField(max_length=200)
+	name = models.CharField(max_length=200)
 	artist = models.ForeignKey(Artist)
-
+	year = models.IntegerField(default=0)
+	art_url = models.CharField(max_length=200)
+	
+	class Meta:
+		unique_together = ("name", "artist")
+	
 
 class Track(models.Model):
 	name = models.CharField(max_length=200)

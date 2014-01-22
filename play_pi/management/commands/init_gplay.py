@@ -48,29 +48,34 @@ class Command(BaseCommand):
             if a not in artists:
                 artist = Artist()
                 artist.name = a
+                
                 try:
                     artist.art_url = song['artistImageBaseUrl']
                 except:
                     artist.art_url = ""
+                
                 artist.save()
                 artists.append(a)
-                self.stdout.write('Added artist: '+ a)
+                self.stdout.write('Added artist: ' + a)
             else:
                 artist = Artist.objects.get(name=a)
             track.artist = artist
 
-            if song['album'] not in albums:
+            if song['album'] + a not in albums:
                 album = Album()
                 album.name = song['album']
                 album.artist = artist
+                album.year = song['year']
+               
                 try:
                     album.art_url = song['albumArtUrl']
                 except:
                     album.art_url = ""
+                    
                 album.save()
-                albums.append(song['album'])
+                albums.append(song['album'] + a)
             else:
-                album = Album.objects.get(name=song['album'])
+                album = Album.objects.get(name=song['album'], artist=artist)
             track.album = album
 
             track.name = song['title']
