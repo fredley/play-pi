@@ -65,7 +65,10 @@ class Command(BaseCommand):
                 album = Album()
                 album.name = song['album']
                 album.artist = artist
-                album.year = song['year']
+                try:
+                    album.year = song['year']
+                except:
+                    pass
                
                 try:
                     album.art_url = song['albumArtUrl']
