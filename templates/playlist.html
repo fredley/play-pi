@@ -6,18 +6,13 @@
 
 {% block content %}
 
-<ul class="breadcrumb">
-  <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
-  <li><a href="{% url 'playlists' %}">Playlists</a> <span class="divider">/</span></li>
-  <li class="active">{{ playlist.name }}</li>
-</ul>
+
 
 <div class="page-header">
 	  <h1>{{ playlist.name }}</h1>
 </div>
 
-<img src='{{ playlist.art_url }}' class='album-image' alt=''/>
-<a id='play-link' class='play-playlist' href='{% url "play_playlist" playlist.id %}'>▶ Play Playlist</a>
+<img src='{% if playlist and playlist.art_url %} {{ playlist.art_url }} {% else %} /static/img/banner.png {% endif %}' class='album-image' alt=''/>
 
 <table class="table table-striped album-table">
   <tr>

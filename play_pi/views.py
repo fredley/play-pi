@@ -45,14 +45,14 @@ def playlist(request,playlist_id):
 	playlist = Playlist.objects.get(id=playlist_id)
 	tracks = [pc.track for pc in PlaylistConnection.objects.filter(playlist=playlist)]
 	return render_to_response('playlist.html',
-		{'playlist': playlist, 'tracks': tracks},
+		{'playlist': playlist, 'tracks': tracks, 'view': 'single_playlist'},
 		context_instance=RequestContext(request))
 
 def album(request,album_id):
 	album = Album.objects.get(id=album_id)
 	tracks = Track.objects.filter(album=album).order_by('track_no')
 	return render_to_response('album.html',
-		{'album': album, 'tracks': tracks},
+		{'album': album, 'tracks': tracks, 'view': 'single_album'},
 		context_instance=RequestContext(request))
 
 def play_album(request,album_id):
@@ -60,7 +60,7 @@ def play_album(request,album_id):
 	tracks = Track.objects.filter(album=album).order_by('track_no')
 	urls = []
 	for track in tracks:
-		urls.append(reverse('get_stream',args=[track.id,]))
+		urls.append(SITE_ROOT + reverse('get_stream',args=[track.id,]))
 	mpd_play(urls)
 	return HttpResponseRedirect(reverse('album',args=[album.id,]))
 
@@ -71,7 +71,7 @@ def play_artist(request,artist_id):
 	for album in albums:
 		tracks = Track.objects.filter(album=album).order_by('track_no')
 		for track in tracks:
-			urls.append(reverse('get_stream',args=[track.id,]))
+			urls.append(SITE_ROOT + reverse('get_stream',args=[track.id,]))
 	mpd_play(urls)
 	return HttpResponseRedirect(reverse('artist',args=[artist.id,]))
 
@@ -80,7 +80,7 @@ def play_playlist(request,playlist_id):
 	tracks = [pc.track for pc in PlaylistConnection.objects.filter(playlist=playlist)]
 	urls = []
 	for track in tracks:
-		urls.append(reverse('get_stream',args=[track.id,]))
+		urls.append(SITE_ROOT + reverse('get_stream',args=[track.id,]))
 	mpd_play(urls)
 	return HttpResponseRedirect(reverse('playlist',args=[playlist.id,]))
 
@@ -139,7 +139,7 @@ def mpd_play(urls):
 	client = get_client()
 	client.clear()
 	for url in urls:
-		client.add(SITE_ROOT + url)
+		client.add(url)
 	client.play()
 
 def get_client():
@@ -147,5 +147,8 @@ def get_client():
 	try:
 		client.status()
 	except:
-		client.connect("localhost", 6600)
+		try:
+			client.connect("localhost", 6600)
+		except:
+			print "This is weird."
 	return client
