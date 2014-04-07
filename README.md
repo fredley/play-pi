@@ -12,8 +12,9 @@ A frontend for a [Google Play Music](http://play.google.com/music/) Pi Jukebox. 
 * Test that `mpc` is working by entering the command `sudo mpc`. You should see output like
 *volume: 80%   repeat: off   random: off   single: off   consume: off*
 There are [futher instructions for setting up/testing mpc](http://www.gmpa.it/it9xxs/?p=727) if you want them.
-* Next you'll need to use `pip` to install Django and gmusicapi (from git, as the packaged release is broken):
+* Next you'll need to use `pip` to install Django, python-mpd2 and gmusicapi (from git, as the packaged release is broken):
 `sudo pip install django`
+`sudo pip install python-mpd2`
 `sudo pip install git+git://github.com/simon-weber/Unofficial-Google-Music-API.git@develop`
 * Now clone this repository:
 `git clone git://github.com/fredley/play-pi.git`
