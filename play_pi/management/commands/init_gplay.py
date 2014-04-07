@@ -18,17 +18,17 @@ class Command(BaseCommand):
             return
 
         self.stdout.write('Connected to Google Music, downloading data...')
-        library = []
-        #library = api.get_all_songs()
+        #library = []
+        library = api.get_all_songs()
         self.stdout.write('Data downloaded!')
         self.stdout.write('Clearing DB...')
         cursor = connection.cursor()
         # This can take a long time using ORM commands on the Pi, so lets Truncate
-        #cursor.execute('DELETE FROM ' + Track._meta.db_table)
-        #cursor.execute('DELETE FROM ' + Album._meta.db_table)
-        #cursor.execute('DELETE FROM ' + Artist._meta.db_table)
-        #cursor.execute('DELETE FROM ' + Playlist._meta.db_table)
-        #cursor.execute('DELETE FROM ' + PlaylistConnection._meta.db_table)
+        cursor.execute('DELETE FROM ' + Track._meta.db_table)
+        cursor.execute('DELETE FROM ' + Album._meta.db_table)
+        cursor.execute('DELETE FROM ' + Artist._meta.db_table)
+        cursor.execute('DELETE FROM ' + Playlist._meta.db_table)
+        cursor.execute('DELETE FROM ' + PlaylistConnection._meta.db_table)
         self.stdout.write('Parsing new data...')
 
         # Easier to keep track of who we've seen like this...
@@ -93,15 +93,8 @@ class Command(BaseCommand):
         self.stdout.write('All tracks saved!')
         self.stdout.write('Getting Playlists...')
         
-        #playlists = api.get_all_playlists()
         self.stdout.write('Saving playlists...')
-        #for playlist in playlists:
-        #    p = Playlist()
-        #    p.pid = playlist['id']
-        #    p.name = playlist['name']
-        #    p.save()
 
-        #for playlist in Playlist.objects.all():
         self.stdout.write('Getting playlist contents.')
         playlists = api.get_all_user_playlist_contents()
         for playlist in playlists:
@@ -118,14 +111,5 @@ class Command(BaseCommand):
                     pc.save()
                 except Exception:
                     print "Not found."
-            #try:
-            #    track = Track.objects.get(stream_id=song['id'])
-            #except Exception:
-            #    self.stdout.write('Couldnt find '+ song['name'])
-            #    continue
-            #pc = PlaylistConnection()
-            #pc.playlist = Playlist.objects.get(pid=song['playlistId']) #playlist
-            #pc.track = track
-            #pc.save()
 
         self.stdout.write('Library saved!')
