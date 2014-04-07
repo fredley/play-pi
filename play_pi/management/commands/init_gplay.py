@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection
-from gmusicapi import Webclient
+from gmusicapi import Mobileclient, Webclient
 from play_pi.settings import GPLAY_USER, GPLAY_PASS
 from play_pi.models import *
 
@@ -12,13 +12,14 @@ class Command(BaseCommand):
             self.stdout.write('Credentials not set up. Please edit settings.py')
             return
 
-        api = Webclient()
+        api = Mobileclient()
         if not api.login(GPLAY_USER,GPLAY_PASS):
             self.stdout.write('Incorrect credentials, login failed')
             return
 
         self.stdout.write('Connected to Google Music, downloading data...')
-        library = api.get_all_songs()
+        #library = []
+	library = api.get_all_songs()
         self.stdout.write('Data downloaded!')
         self.stdout.write('Clearing DB...')
         cursor = connection.cursor()
@@ -50,7 +51,7 @@ class Command(BaseCommand):
                 artist.name = a
                 
                 try:
-                    artist.art_url = song['artistImageBaseUrl']
+                    artist.art_url = song['artistArtRef'][0]['url']
                 except:
                     artist.art_url = ""
                 
@@ -71,7 +72,7 @@ class Command(BaseCommand):
                     pass
                
                 try:
-                    album.art_url = song['albumArtUrl']
+                    album.art_url = song['albumArtRef'][0]['url']
                 except:
                     album.art_url = ""
                     
@@ -91,23 +92,27 @@ class Command(BaseCommand):
 
         self.stdout.write('All tracks saved!')
         self.stdout.write('Getting Playlists...')
-        playlists = api.get_all_playlist_ids(auto=False, user=True)
+        
+	playlists = api.get_all_playlists()
         self.stdout.write('Saving playlists...')
-        for name in playlists['user']:
-            for pid in playlists['user'][name]:
-                p = Playlist()
-                p.pid = pid
-                p.name = name
-                p.save()
+        for playlist in playlists:
+            p = Playlist()
+            p.pid = playlist['id']
+            p.name = playlist['name']
+            p.save()
 
-        for playlist in Playlist.objects.all():
-            self.stdout.write('Getting playlist contents for ' + playlist.name)
-            songs = api.get_playlist_songs(playlist.pid)
-            for song in songs:
+        #for playlist in Playlist.objects.all():
+        self.stdout.write('Getting playlist contents.')
+        songs = api.get_all_user_playlist_contents()
+        for song in songs:
+	    try:
                 track = Track.objects.get(stream_id=song['id'])
-                pc = PlaylistConnection()
-                pc.playlist = playlist
-                pc.track = track
-                pc.save()
+            except Exception:
+                self.stdout.write('Couldnt find '+ song['name'])
+                continue
+            pc = PlaylistConnection()
+            pc.playlist = Playlist.objects.get(pid=song['playlistId']) #playlist
+            pc.track = track
+            pc.save()
 
         self.stdout.write('Library saved!')
