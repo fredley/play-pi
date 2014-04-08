@@ -51,6 +51,8 @@ $(document).ready(function() {
       e.preventDefault();
       ajax("repeat");
   });
+  
+  
 
 });
 </script>
@@ -60,8 +62,6 @@ $(document).ready(function() {
 
 <div id='content'>
 
-
-<div class='container'>
 
 <header class="jumbotron" id="overview">
   <div class="container">
@@ -77,6 +77,14 @@ $(document).ready(function() {
       <a class="btn {% if mpd_status.repeat == '1' %}btn-highlight{% endif %} btn-inverse" href='{% url "repeat" %}' id='repeat-button'>
           <i class='icon-repeat icon-white'></i> Repeat
       </a>
+      {% if view == 'album' %}
+        <a class='btn btn-inverse' href='{% url "play_artist" artist.id %}'>▶ Play Artist</a>
+      {% elif view == 'single_playlist' %}
+      <a class='btn btn-inverse' href='{% url "play_playlist" playlist.id %}'>▶ Play Playlist</a>
+      {% elif view == 'single_album' %}
+      <a class='btn btn-inverse' href='{% url "play_album" album.id %}'>▶ Play Album</a>
+      
+      {% endif %}
     </p>
     <a class='nav-link' href='{% url "home" %}'>
         <i class='icon-user'></i> Artists
@@ -84,8 +92,29 @@ $(document).ready(function() {
     <a class='nav-link' href='{% url "playlists" %}'>
         <i class='icon-list'></i> Playlists
     </a>
+
+    {% if view == 'album' %}
+    <ul class="breadcrumb pull-right">
+      <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
+      <li class="active">{{ artist.name }}</li>
+    </ul>
+    {% elif view == 'single_playlist' %}
+    <ul class="breadcrumb pull-right">
+      <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
+      <li><a href="{% url 'playlists' %}">Playlists</a> <span class="divider">/</span></li>
+      <li class="active">{{ playlist.name }}</li>
+    </ul>
+    {% elif view == 'single_album' %}
+    <ul class="breadcrumb pull-right">
+      <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
+      <li><a href="{% url 'artist' album.artist.id %}">{{ album.artist.name }}</a> <span class="divider">/</span></li>
+      <li class="active">{{ album.name }}</li>
+    </ul>
+    {% endif %}
   </div>
 </header>
+<div class='container'>
+
 {% block content %}
   Hello World
 {% endblock %}

@@ -6,18 +6,12 @@
 
 {% block content %}
 
-<ul class="breadcrumb">
-  <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
-  <li><a href="{% url 'artist' album.artist.id %}">{{ album.artist.name }}</a> <span class="divider">/</span></li>
-  <li class="active">{{ album.name }}</li>
-</ul>
 
 <div class="page-header">
   <h1>{{ album.name }} <small> {{ album.artist.name }}</small></h1>
 </div>
 
 <img src='{{ album.art_url }}' class='album-image' alt=''/>
-<a id='play-link' href='{% url "play_album" album.id %}'>▶ Play Album</a>
 
 <table class="table table-striped album-table">
   <tr>

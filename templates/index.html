@@ -6,27 +6,20 @@
 
 {% block content %}
 
-{% if view == 'album' %}
-<ul class="breadcrumb">
-  <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
-  <li class="active">{{ artist.name }}</li>
-</ul>
-
-<a id='play-link' class='play-artist' href='{% url "play_artist" artist.id %}'>▶ Play Artist</a>
-{% endif %}
 
 <div class='row'>
   <form class="form-search">
-    <input type="text" id="search-box" class="span12 search-query" placeholder="Filter" />
+    <input type="text" id="search-box" class="search-query clearfix" placeholder="Filter" />
   </form>
-</div>
 
+</div>
 <div class="thumbnails">
+
 
 {% for item in list %}
 
 <a href="{% url view item.id %}" class="thumbnail" name="{{ item.name }}">
-	<img src="{{ item.art_url }}" alt="">
+	<img src="{% if item and item.art_url %} {{ item.art_url }} {% else %} /static/img/banner.png {% endif %} " alt="">
 	<h3>{{ item.name }}</h3>
 </a>
 

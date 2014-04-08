@@ -15,24 +15,21 @@ a:hover{
     color:#fb8823;
 }
 .nav-link{
-    display: block;
-    clear:both;
     font-size:16px;
-    padding-top: 8px;
+    padding: 8px;
     color:#222;
 }
 .jumbotron{
     position: relative;
     background: #f1f1f1 url('../img/banner.png') center top no-repeat;
     background-size:auto 100%;
-    padding:40px 10px 10px 10px;
+    padding: 30px 10px 10px 10px;
     margin-top: -20px;
-    margin-right: -20000px;
-    margin-left: -20000px;
     color:#fb8823;
     border-bottom:1px solid #ddd;
 }
 .breadcrumb{
+	margin: 0;
     background-color: transparent;
 }
 .breadcrumb a{
@@ -55,10 +52,14 @@ div.thumbnails{
     position: relative;
     overflow: hidden;
     height: 200px;
-    min-width:220px;
+    min-width:30%;
     max-width:30%;
+    
     margin:0 11px 10px 0;
     float:left;
+}
+.thumbnail img {
+    width: 100%;
 }
 .thumbnail h3{
     color:#777;
@@ -75,9 +76,8 @@ a.thumbnail:focus{
     box-shadow: 0 1px 4px rgba(251, 136, 35, 0.25);
 }
 #search-box{
-    margin-top:20px;
-    margin-left:20px;
-    width:92%;
+	margin-top:20px;
+    width:91%;
     border:0;
     background: #f1f1f1;
     border:1px solid #ddd;
@@ -86,13 +86,11 @@ a.thumbnail:focus{
     color:#555;
 }
 #play-link{
-    float:left;
-    width:50%;
+	margin:0px;
     font-size:20px;
-    margin-bottom:30px;
 }
 #play-link.play-artist{
-    margin-bottom:0;
+    margin-bottom: 0;
 }
 #play-link.play-playlist{
     margin-left:0;
@@ -105,6 +103,8 @@ a.thumbnail:focus{
     float:left;
     margin-right:30px;
     margin-bottom:30px;
+    width: 300px;
+    height: 300px;
 }
 .album-table{
     float:left;
@@ -149,7 +149,7 @@ a.thumbnail:focus{
 }
 @media (min-width: 1200px) {
     #search-box{
-        margin-left:30px;
+        margin-left:20px;
     }
     .thumbnail{
         height: 230px;
