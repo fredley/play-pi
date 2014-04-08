@@ -30,6 +30,9 @@ $(document).ready(function() {
         }
     });
   });
+  
+  $(".thumbnail h3").wrapInner("<span>");
+  $(".thumbnail h3 br").before("<span class='spacer'>").after("<span class='spacer'>");
 
   function ajax(toggle){
     $.ajax("/ajax/"+toggle+"/",{ type: "GET" }).always(function (response) {

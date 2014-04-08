@@ -53,19 +53,42 @@ div.thumbnails{
     border:1px solid #ddd;
     background: #f1f1f1;
     overflow: hidden;
-    height: 240px;
+    height: 177px;
     width: 100%;
+    position: relative;
+    padding: 0;
+}
+@media(max-width: 767px) {
+    .thumbnail{
+        height: 165px;
+    }
 }
 .thumbnail img {
-    max-height: 175px;
+    width: 100%;
 }
 .thumbnail h3{
     margin-top: 10px;
-    color:#777;
-    font-weight: lighter;
     text-decoration: none;
-    font-size: 1.3em;
-    line-height: 1.2em;
+    font-size: 20px;
+    letter-spacing: 1.4px;
+    line-height: 38px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.thumbnail h3 span{
+    color: white;
+    background: rgb(0,0,0); /*fallback*/
+    background: rgba(0,0,0,0.6);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 7.5px;
+    padding-bottom: 7.5px;
+}
+.thumbnail h3 span.spacer {
+    padding: 0 5px;
+    background: 0;
 }
 a.thumbnail:hover,
 a.thumbnail:focus{

@@ -24,8 +24,8 @@
 
     <div class="col-md-4">
       <a href="{% url view item.id %}" class="thumbnail" name="{{ item.name }}">
-	      <img src="{% if item and item.art_url %} {{ item.art_url }} {% else %} /static/img/banner.png {% endif %} " alt="">
-	      <h3>{{ item.name }}</h3>
+	      <img src="{% if item and item.art_url %} {{ item.art_url }} {% else %} /static/img/banner.png {% endif %} " alt="" />
+	      <h3>{{ item.name|wordwrap:20|linebreaksbr}}</h3>
       </a>
     </div>
     {% endfor %}
