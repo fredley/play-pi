@@ -68,23 +68,26 @@ $(document).ready(function() {
     <h1>Play Pi</h1>
     <p class="lead">Google Play Music Control Station</p>
     <p>
-      <a class="btn btn-danger" href='{% url "stop" %}' id='stop-button'>
-          <i class='icon-stop icon-white'></i> Stop
-      </a>
-      <a class="btn {% if mpd_status.random == '1' %}btn-highlight{% endif %} btn-inverse" href='{% url "random" %}' id='random-button'>
-          <i class='icon-random icon-white'></i> Random
-      </a>
-      <a class="btn {% if mpd_status.repeat == '1' %}btn-highlight{% endif %} btn-inverse" href='{% url "repeat" %}' id='repeat-button'>
-          <i class='icon-repeat icon-white'></i> Repeat
-      </a>
-      {% if view == 'album' %}
-        <a class='btn btn-inverse' href='{% url "play_artist" artist.id %}'>▶ Play Artist</a>
-      {% elif view == 'single_playlist' %}
-      <a class='btn btn-inverse' href='{% url "play_playlist" playlist.id %}'>▶ Play Playlist</a>
-      {% elif view == 'single_album' %}
-      <a class='btn btn-inverse' href='{% url "play_album" album.id %}'>▶ Play Album</a>
+      <div class="btn-group">
+        <a class="btn btn-danger" href='{% url "stop" %}' id='stop-button'>
+            <i class='icon-stop icon-white'></i> Stop
+        </a>
+        <a class="btn {% if mpd_status.random == '1' %}btn-highlight{% endif %} btn-inverse" href='{% url "random" %}' id='random-button'>
+            <i class='icon-random icon-white'></i> Random
+        </a>
+        <a class="btn {% if mpd_status.repeat == '1' %}btn-highlight{% endif %} btn-inverse" href='{% url "repeat" %}' id='repeat-button'>
+            <i class='icon-repeat icon-white'></i> Repeat
+        </a>
+        {% if view == 'album' %}
+          <a class='btn btn-inverse' href='{% url "play_artist" artist.id %}'>▶ Play Artist</a>
+        {% elif view == 'single_playlist' %}
+          <a class='btn btn-inverse' href='{% url "play_playlist" playlist.id %}'>▶ Play Playlist</a>
+        {% elif view == 'single_album' %}
+          <a class='btn btn-inverse' href='{% url "play_album" album.id %}'>▶ Play Album</a>
       
-      {% endif %}
+        {% endif %}
+      </div>
+      
     </p>
     <a class='nav-link' href='{% url "home" %}'>
         <i class='icon-user'></i> Artists
