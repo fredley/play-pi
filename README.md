@@ -8,7 +8,7 @@ A frontend for a [Google Play Music](http://play.google.com/music/) Pi Jukebox. 
 
 * Not covered in this guide: Setting up ssh/wireless/sound card. These topics are covered in this [lifehacker guide](http://lifehacker.com/5978594/turn-a-raspberry-pi-into-an-airplay-receiver-for-streaming-music-in-your-living-room).
 * Assuming you've got the Pi set up as you want, you'll need to install the required tools:
-`sudo apt-get install mpd mpc python-mpd python-pip screen`
+`sudo apt-get install mpd mpc python-pip screen`
 * Test that `mpc` is working by entering the command `sudo mpc`. You should see output like
 *volume: 80%   repeat: off   random: off   single: off   consume: off*
 There are [futher instructions for setting up/testing mpc](http://www.gmpa.it/it9xxs/?p=727) if you want them.
