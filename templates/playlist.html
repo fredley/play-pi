@@ -7,24 +7,30 @@
 {% block content %}
 
 
-
-<div class="page-header">
-	  <h1>{{ playlist.name }}</h1>
+<div class="row">
+  <div class="col-md-12">
+    <h1>{{ playlist.name }} <a type="button" class='btn btn-default' href='{% url "play_playlist" playlist.id %}'>▶ Play Playlist</a></h1>
+  </div>
 </div>
-
-<img src='{% if playlist and playlist.art_url %} {{ playlist.art_url }} {% else %} /static/img/banner.png {% endif %}' class='album-image' alt=''/>
-
-<table class="table table-striped album-table">
-  <tr>
-  	<th class='play-col'></th>
-  	<th>Name</th>
-  </tr>
-  {% for track in tracks %}
+<div class="row">
+  <div class="col-md-3">
+    <img src='{% if playlist and playlist.art_url %} {{ playlist.art_url }} {% else %} /static/img/banner.png {% endif %}' class='album-image' alt=''/>
+  </div>
+  <div class="col-md-9">
+  <table class="table table-striped album-table">
     <tr>
-    	<td class='play-col'><a href='{% url "play_track" track.id %}'>▶</a></td>
-    	<td>{{ track.name }}</td>
+    	<th class='play-col'></th>
+    	<th>Name</th>
+      <th>Artist</th>
     </tr>
-  {% endfor %}
-</table>
-
+    {% for track in tracks %}
+      <tr>
+      	<td class='play-col'><a href='{% url "play_track" track.id %}'>▶</a></td>
+      	<td>{{ track.name }}</td>
+        <td>{{ track.artist.name }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+  </div>
+</div>
 {% endblock %}

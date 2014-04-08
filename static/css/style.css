@@ -25,8 +25,12 @@ a:hover{
     background-size:auto 100%;
     padding: 30px 10px 10px 10px;
     margin-top: -20px;
+    margin-bottom: 10px;
     color:#fb8823;
     border-bottom:1px solid #ddd;
+}
+h1 {
+    margin-top: 10px;
 }
 .breadcrumb{
 	margin: 0;
@@ -44,24 +48,19 @@ a:hover{
     float:left;
 }
 div.thumbnails{
-    padding-left:20px;
 }
 .thumbnail{
     border:1px solid #ddd;
     background: #f1f1f1;
-    position: relative;
     overflow: hidden;
-    height: 200px;
-    min-width:30%;
-    max-width:30%;
-    
-    margin:0 11px 10px 0;
-    float:left;
-}
-.thumbnail img {
+    height: 240px;
     width: 100%;
 }
+.thumbnail img {
+    max-height: 175px;
+}
 .thumbnail h3{
+    margin-top: 10px;
     color:#777;
     font-weight: lighter;
     text-decoration: none;
@@ -76,14 +75,14 @@ a.thumbnail:focus{
     box-shadow: 0 1px 4px rgba(251, 136, 35, 0.25);
 }
 #search-box{
-	margin-top:20px;
-    width:91%;
+    width:100%;
     border:0;
     background: #f1f1f1;
     border:1px solid #ddd;
     border-radius:0;
     padding:10px;
     color:#555;
+    margin-bottom: 20px;
 }
 #play-link{
 	margin:0px;
@@ -103,55 +102,19 @@ a.thumbnail:focus{
     float:left;
     margin-right:30px;
     margin-bottom:30px;
-    width: 300px;
-    height: 300px;
+    max-width: 100%;
 }
 .album-table{
-    float:left;
-    max-width:70%;
     color:#555;
 }
-
-@media (max-width: 767px){
-    .jumbotron {
-        padding: 40px 20px;
-        margin-top: -20px;
-        margin-right: -20px;
-        margin-left: -20px;
-    }
-    #play-link{
-        margin: 0 0 20px 20px;
-    }
-    #search-box{
-        width: 88%;
-    }
-    .album-table{
-        max-width:90%;
-    }
-    .thumbnail{
-        max-width: 767px;
-        width:90%;
-    }
-    .thumbnail img{
-        height: 170px;
-    }
+#current-song {
+    margin-top: 10px;
+	text-align: right;
 }
-
-@media (max-width: 979px) and (min-width: 768px){
-    .thumbnail{
-        height: 200px;
-    }
+#current-song-title {
+    font-size: 20px;
 }
-@media (max-width: 980px) and (min-width: 1199px){
-    .thumbnail{
-        height: 230px;
-    }
-}
-@media (min-width: 1200px) {
-    #search-box{
-        margin-left:20px;
-    }
-    .thumbnail{
-        height: 230px;
-    }
+.btn-group {
+    width: 200px;
+    margin: 0 auto;
 }

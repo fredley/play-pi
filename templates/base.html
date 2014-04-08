@@ -7,10 +7,12 @@
 <title>Play Pi</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/bootstrap-theme.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/bootstrap.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/style.css" media="screen" />
 
 <script src="{% get_static_prefix %}js/jquery.min.js"></script>
+<script src="{% get_static_prefix %}js/bootstrap.js"></script>
 
 <link rel="shortcut icon" type="image/x-icon" href="{% get_static_prefix %}img/favicon.ico" />
 
@@ -18,13 +20,13 @@
 
 <script>
 $(document).ready(function() {
-
+  var currentStatus = "";
   $('#search-box').keyup(function() {
     $('.thumbnail').each(function(){
         if($(this).attr('name').toLowerCase().indexOf($('#search-box').val().toLowerCase()) == -1){
-            $(this).hide();
+            $(this).parent().hide();
         }else{
-            $(this).show();
+            $(this).parent().show();
         }
     });
   });
@@ -32,7 +34,9 @@ $(document).ready(function() {
   function ajax(toggle){
     $.ajax("/ajax/"+toggle+"/",{ type: "GET" }).always(function (response) {
       results = JSON.parse(response['responseText']);
-      if(toggle != "stop"){
+      fetchCurrentlyPlaying();
+      
+      if(toggle === "random" || toggle === "repeat"){
         $("#"+toggle+"-button").toggleClass('btn-highlight');
       }
     });
@@ -51,9 +55,54 @@ $(document).ready(function() {
       e.preventDefault();
       ajax("repeat");
   });
-  
-  
-
+  $('#pause-button').click(function(e) {
+    ajax("pause");
+    $("#play-button").show();
+    $("#pause-button").hide();
+  });
+  $('#play-button').click(function(e) {
+    ajax("play");
+    $("#play-button").hide();
+    $("#pause-button").show();
+  });
+  $("#next-button").click(function(e) {
+    ajax("next");
+  });
+  $("#previous-button").click(function(e) {
+    ajax("previous");
+  });
+  var currentTimeout = setTimeout(fetchCurrentlyPlaying, 5000);
+  function fetchCurrentlyPlaying() {
+    clearTimeout(currentTimeout);
+    $.ajax("/ajax/current_song",{type: "GET"}).always(function(data) {
+      currentTimeout = setTimeout(fetchCurrentlyPlaying, 5000);
+      
+      var data = JSON.parse(data['responseText']);
+      $("#current-song-album").text(data.album);
+      $("#current-song-title").text(data.title);
+      $("#current-song-artist").text(data.artist);
+      currentStatus = data.state;
+      if((!data.album && !data.title && !data.artist) || currentStatus === "stop") {
+        $("#current-song").hide();
+      } else {
+        $("#current-song").show();
+      }
+      
+      if(currentStatus === "play") {
+        $("#play-button").hide();
+        $("#pause-button").show();
+      } else if (currentStatus === "pause") {
+        $("#play-button").show();
+        $("#pause-button").hide();
+      } else {
+        $("#play-button").hide();
+        $("#pause-button").hide();
+      }
+    });
+  }
+  $("#current-song").hide();
+  $("#play-button").hide();
+  fetchCurrentlyPlaying();
 });
 </script>
 
@@ -65,55 +114,62 @@ $(document).ready(function() {
 
 <header class="jumbotron" id="overview">
   <div class="container">
-    <h1>Play Pi</h1>
-    <p class="lead">Google Play Music Control Station</p>
-    <p>
-      <div class="btn-group">
-        <a class="btn btn-danger" href='{% url "stop" %}' id='stop-button'>
-            <i class='icon-stop icon-white'></i> Stop
+    <div class="row">
+      <div class="col-md-8">
+        <h1>Play Pi</h1>
+        <a class='nav-link' href='{% url "home" %}'>
+            <i class='glyphicon glyphicon-user'></i> Artists
         </a>
-        <a class="btn {% if mpd_status.random == '1' %}btn-highlight{% endif %} btn-inverse" href='{% url "random" %}' id='random-button'>
-            <i class='icon-random icon-white'></i> Random
+        <a class='nav-link' href='{% url "playlists" %}'>
+            <i class='glyphicon glyphicon-list'></i> Playlists
         </a>
-        <a class="btn {% if mpd_status.repeat == '1' %}btn-highlight{% endif %} btn-inverse" href='{% url "repeat" %}' id='repeat-button'>
-            <i class='icon-repeat icon-white'></i> Repeat
-        </a>
-        {% if view == 'album' %}
-          <a class='btn btn-inverse' href='{% url "play_artist" artist.id %}'>▶ Play Artist</a>
-        {% elif view == 'single_playlist' %}
-          <a class='btn btn-inverse' href='{% url "play_playlist" playlist.id %}'>▶ Play Playlist</a>
-        {% elif view == 'single_album' %}
-          <a class='btn btn-inverse' href='{% url "play_album" album.id %}'>▶ Play Album</a>
-      
-        {% endif %}
       </div>
-      
-    </p>
-    <a class='nav-link' href='{% url "home" %}'>
-        <i class='icon-user'></i> Artists
-    </a>
-    <a class='nav-link' href='{% url "playlists" %}'>
-        <i class='icon-list'></i> Playlists
-    </a>
-
-    {% if view == 'album' %}
-    <ul class="breadcrumb pull-right">
-      <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
-      <li class="active">{{ artist.name }}</li>
-    </ul>
-    {% elif view == 'single_playlist' %}
-    <ul class="breadcrumb pull-right">
-      <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
-      <li><a href="{% url 'playlists' %}">Playlists</a> <span class="divider">/</span></li>
-      <li class="active">{{ playlist.name }}</li>
-    </ul>
-    {% elif view == 'single_album' %}
-    <ul class="breadcrumb pull-right">
-      <li><a href="{% url 'home' %}">Home</a> <span class="divider">/</span></li>
-      <li><a href="{% url 'artist' album.artist.id %}">{{ album.artist.name }}</a> <span class="divider">/</span></li>
-      <li class="active">{{ album.name }}</li>
-    </ul>
-    {% endif %}
+      <div class="col-md-4">
+        <div id="current-song">
+          Now playing:<br />
+          <span id="current-song-title"></span><br />
+          <span id="current-song-artist"></span> - <span id="current-song-album"></span><br />
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-offset-5 col-md-3" style=" margin: 0 auto; text-align: center; float:none;">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default" href="#" id="previous-button"><i class='glyphicon glyphicon-backward'></i></button>
+          <button type="button" class="btn btn-success" href="#" id="play-button"> <i class='glyphicon glyphicon-play icon-white'></i></button>
+          <button type="button" class="btn btn-primary"  href="#" id="pause-button"><i class='glyphicon glyphicon-pause icon-white'></i></button>
+          <button type="button" class="btn btn-default" href="#" id="next-button"><i class='glyphicon glyphicon-forward icon-white'></i></button>
+          <button type="button" class="btn {% if mpd_status.random == '1' %}btn-highlight{% endif %} btn-default" href='{% url "random" %}' id='random-button'>
+              <i class='glyphicon glyphicon-random icon-white'></i>
+          </button>
+          <button type="button" class="btn {% if mpd_status.repeat == '1' %}btn-highlight{% endif %} btn-default" href='{% url "repeat" %}' id='repeat-button'>
+              <i class='glyphicon glyphicon-repeat icon-white'></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-offset-8 col-md-4">
+      {% if view == 'album' %}
+      <ol class="breadcrumb pull-right">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li class="active">{{ artist.name }}</li>
+      </ol>
+      {% elif view == 'single_playlist' %}
+      <ol class="breadcrumb pull-right">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'playlists' %}">Playlists</a></li>
+        <li class="active">{{ playlist.name }}</li>
+      </ol>
+      {% elif view == 'single_album' %}
+      <ol class="breadcrumb pull-right">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'artist' album.artist.id %}">{{ album.artist.name }}</a></li>
+        <li class="active">{{ album.name }}</li>
+      </ol>
+      {% endif %}
+      </div>
+    </div>
   </div>
 </header>
 <div class='container'>
@@ -121,7 +177,10 @@ $(document).ready(function() {
 {% block content %}
   Hello World
 {% endblock %}
+<p>Google Play Music Control Station</p>
+
 </div>
+
 </div>
 
 </body>

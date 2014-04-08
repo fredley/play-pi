@@ -49,12 +49,11 @@ class Command(BaseCommand):
             if a not in artists:
                 artist = Artist()
                 artist.name = a
-                
+
                 try:
                     artist.art_url = song['artistArtRef'][0]['url']
                 except:
-                    artist.art_url = ""
-                
+                    print "No Art found."
                 artist.save()
                 artists.append(a)
                 self.stdout.write('Added artist: ' + a)
@@ -70,12 +69,11 @@ class Command(BaseCommand):
                     album.year = song['year']
                 except:
                     pass
-               
+
                 try:
                     album.art_url = song['albumArtRef'][0]['url']
                 except:
-                    album.art_url = ""
-                    
+                    print "No Art found."
                 album.save()
                 albums.append(song['album'] + a)
             else:
