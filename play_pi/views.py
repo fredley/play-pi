@@ -63,11 +63,7 @@ def play_album(request,album_id):
 
 def play_artist(request,artist_id):
 	artist = Artist.objects.get(id=artist_id)
-	albums = Album.objects.filter(artist=artist)
-	final_tracks = []
-	for album in albums:
-		tracks = Track.objects.filter(album=album).order_by('track_no')
-		final_tracks.append(tracks)
+	tracks = Track.objects.filter(artist=artist)
 	mpd_play(tracks)
 	return HttpResponseRedirect(reverse('artist',args=[artist.id,]))
 
