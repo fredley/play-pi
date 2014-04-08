@@ -58,30 +58,23 @@ def album(request,album_id):
 def play_album(request,album_id):
 	album = Album.objects.get(id=album_id)
 	tracks = Track.objects.filter(album=album).order_by('track_no')
-	urls = []
-	for track in tracks:
-		urls.append(SITE_ROOT + reverse('get_stream',args=[track.id,]))
-	mpd_play(urls)
+	mpd_play(tracks)
 	return HttpResponseRedirect(reverse('album',args=[album.id,]))
 
 def play_artist(request,artist_id):
 	artist = Artist.objects.get(id=artist_id)
 	albums = Album.objects.filter(artist=artist)
-	urls = []
+	final_tracks = []
 	for album in albums:
 		tracks = Track.objects.filter(album=album).order_by('track_no')
-		for track in tracks:
-			urls.append(SITE_ROOT + reverse('get_stream',args=[track.id,]))
-	mpd_play(urls)
+		final_tracks.append(tracks)
+	mpd_play(tracks)
 	return HttpResponseRedirect(reverse('artist',args=[artist.id,]))
 
 def play_playlist(request,playlist_id):
 	playlist = Playlist.objects.get(id=playlist_id)
 	tracks = [pc.track for pc in PlaylistConnection.objects.filter(playlist=playlist)]
-	urls = []
-	for track in tracks:
-		urls.append(SITE_ROOT + reverse('get_stream',args=[track.id,]))
-	mpd_play(urls)
+	mpd_play(tracks)
 	return HttpResponseRedirect(reverse('playlist',args=[playlist.id,]))
 
 def get_stream(request,track_id):
@@ -91,8 +84,7 @@ def get_stream(request,track_id):
 
 def play_track(request,track_id):
 	track = Track.objects.get(id=track_id)
-	url = get_gplay_url(track.stream_id)
-	mpd_play([url,])
+	mpd_play([track,])
 	return HttpResponseRedirect(reverse('album',args=[track.album.id,]))
 
 def stop(request):
@@ -123,8 +115,32 @@ def ajax(request,method):
 		client.repeat( (-1 * int(status['repeat'])) + 1 )
 	elif method == 'stop':
 		client.stop()
+	elif method == 'pause':
+		client.pause()
+	elif method == 'play':
+		client.play()
+	elif method == 'next':
+		client.next()
+	elif method == 'previous':
+		client.previous()
+	elif method == 'current_song':
+		track = get_currently_playing_track()
+		if track == {}:
+			return HttpResponse(simplejson.dumps({}), 'application/javascript')
+		data = {'title': track.name, 'album':track.album.name, 'artist': track.artist.name, 'state': client.status()['state']}
+		return HttpResponse(simplejson.dumps(data), 'application/javascript')
+	
 	return_data = client.status()
 	return HttpResponse(simplejson.dumps(return_data), 'application/javascript')
+
+def get_currently_playing_track():
+	status = client.status()
+	try:
+		mpd_id = status['songid']
+	except:
+		return {}
+	if mpd_id == 0: return {}
+	return Track.objects.get(mpd_id=mpd_id)
 
 def get_gplay_url(stream_id):
 	global api
@@ -135,11 +151,12 @@ def get_gplay_url(stream_id):
 		url = api.get_stream_urls(stream_id)[0]
 	return url
 
-def mpd_play(urls):
+def mpd_play(tracks):
 	client = get_client()
 	client.clear()
-	for url in urls:
-		client.add(url)
+	for track in tracks:
+		track.mpd_id = client.addid(SITE_ROOT + reverse('get_stream',args=[track.id,]))
+		track.save()
 	client.play()
 
 def get_client():

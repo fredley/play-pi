@@ -22,6 +22,7 @@ class Track(models.Model):
 	album = models.ForeignKey(Album)
 	stream_id = models.CharField(max_length=100)
 	track_no = models.IntegerField(default=0)
+	mpd_id = models.IntegerField(default=0)
 
 
 class Playlist(models.Model):

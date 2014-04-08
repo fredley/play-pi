@@ -6,25 +6,30 @@
 
 {% block content %}
 
+{% if view == 'album' %}
+<h1>{{ artist.name }} <a class='btn btn-default' href='{% url "play_artist" artist.id %}'>▶ Play Artist</a></h1>
+{% endif %}
 
 <div class='row'>
-  <form class="form-search">
-    <input type="text" id="search-box" class="search-query clearfix" placeholder="Filter" />
-  </form>
-
+  <div class="col-md-12">
+    <form class="form-search">
+      <input type="text" id="search-box" class="search-query" placeholder="Filter" />
+    </form>
+  </div>
 </div>
-<div class="thumbnails">
 
+<div class="row">
+  <div class="thumbnails">
+    {% for item in list %}
 
-{% for item in list %}
-
-<a href="{% url view item.id %}" class="thumbnail" name="{{ item.name }}">
-	<img src="{% if item and item.art_url %} {{ item.art_url }} {% else %} /static/img/banner.png {% endif %} " alt="">
-	<h3>{{ item.name }}</h3>
-</a>
-
-{% endfor %}
-
+    <div class="col-md-4">
+      <a href="{% url view item.id %}" class="thumbnail" name="{{ item.name }}">
+	      <img src="{% if item and item.art_url %} {{ item.art_url }} {% else %} /static/img/banner.png {% endif %} " alt="">
+	      <h3>{{ item.name }}</h3>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
 </div>
 
 {% endblock %}

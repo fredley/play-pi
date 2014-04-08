@@ -7,25 +7,31 @@
 {% block content %}
 
 
-<div class="page-header">
-  <h1>{{ album.name }} <small> {{ album.artist.name }}</small></h1>
+<div class="row">
+  <div class="col-md-12">
+    <h1>{{ album.name }} <small> {{ album.artist.name }}</small> <a class='btn btn-default' href='{% url "play_album" album.id %}'>▶ Play Album</a>
+    </h1>
+  </div>
 </div>
-
-<img src='{{ album.art_url }}' class='album-image' alt=''/>
-
-<table class="table table-striped album-table">
-  <tr>
-  	<th class='play-col'></th>
-  	<th class='num-col'>#</th>
-  	<th>Name</th>
-  </tr>
-  {% for track in tracks %}
-    <tr>
-    	<td class='play-col'><a href='{% url "play_track" track.id %}'>▶</a></td>
-    	<td class='num-col'>{{ track.track_no }}</td>
-    	<td>{{ track.name }}</td>
-    </tr>
-  {% endfor %}
-</table>
-
+<div class="row">
+  <div class="col-md-3">
+    <img src='{{ album.art_url }}' class='album-image' alt=''/>
+  </div>
+  <div class="col-md-9">
+    <table class="table table-striped album-table">
+      <tr>
+      	<th class='play-col'></th>
+      	<th class='num-col'>#</th>
+      	<th>Name</th>
+      </tr>
+      {% for track in tracks %}
+        <tr>
+        	<td class='play-col'><a href='{% url "play_track" track.id %}'>▶</a></td>
+        	<td class='num-col'>{{ track.track_no }}</td>
+        	<td>{{ track.name }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
 {% endblock %}
