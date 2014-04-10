@@ -4,6 +4,7 @@ from django.core.cache import cache
 
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
+from django.core.exceptions import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import simplejson
@@ -130,15 +131,18 @@ def ajax(request,method):
 	return HttpResponse(simplejson.dumps(return_data), 'application/javascript')
 
 def get_currently_playing_track():
-	status = get_client()
+	status = get_client().status()
 	try:
-		mpd_id = status['songid']
+		mpd_id = int(status['songid'])
 	except:
 		return {}
+		
 	if mpd_id == 0:
 		 return {}
+
 	try:
-		return Track.objects.get(mpd_id=mpd_id)
+		track = Track.objects.get(mpd_id=mpd_id)
+		return track
 	except MultipleObjectsReturned:
 		return {}
 
