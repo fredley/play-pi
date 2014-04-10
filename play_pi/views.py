@@ -130,13 +130,17 @@ def ajax(request,method):
 	return HttpResponse(simplejson.dumps(return_data), 'application/javascript')
 
 def get_currently_playing_track():
-	status = client.status()
+	status = get_client()
 	try:
 		mpd_id = status['songid']
 	except:
 		return {}
-	if mpd_id == 0: return {}
-	return Track.objects.get(mpd_id=mpd_id)
+	if mpd_id == 0:
+		 return {}
+	try:
+		return Track.objects.get(mpd_id=mpd_id)
+	except MultipleObjectsReturned:
+		return {}
 
 def get_gplay_url(stream_id):
 	global api
