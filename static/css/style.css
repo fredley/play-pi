@@ -66,21 +66,33 @@ div.thumbnails{
 .thumbnail img {
     width: 100%;
 }
+.thumbnail .cover{
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0) 1%, rgba(0,0,0,0.3) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(1%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.3))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0) 1%,rgba(0,0,0,0.3) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0) 1%,rgba(0,0,0,0.3) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0) 1%,rgba(0,0,0,0.3) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0) 1%,rgba(0,0,0,0.3) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#4d000000',GradientType=0 ); /* IE6-9 */
+}
 .thumbnail h3{
-    margin-top: 10px;
     text-decoration: none;
-    font-size: 20px;
+    font-weight:bold;
+    font-size: 14px;
     letter-spacing: 1.4px;
-    line-height: 38px;
+    line-height: 14px;
     position: absolute;
-    top: 0;
+    bottom: 0;
     left: 0;
     width: 100%;
 }
 .thumbnail h3 span{
     color: white;
-    background: rgb(0,0,0); /*fallback*/
-    background: rgba(0,0,0,0.6);
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 7.5px;

@@ -6,6 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 	url(r'^$', 'play_pi.views.home', name='home'),
+        url(r'^albums/$', 'play_pi.views.albums', name='albums'),
 	url(r'^artist/(?P<artist_id>\d+)/$', 'play_pi.views.artist', name='artist'),
 	url(r'^album/(?P<album_id>\d+)/$', 'play_pi.views.album', name='album'),
 	url(r'^playlists/$', 'play_pi.views.playlists', name='playlists'),

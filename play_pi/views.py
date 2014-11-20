@@ -29,6 +29,12 @@ def home(request):
 		{'list': artists, 'view':'artist'},
 		context_instance=RequestContext(request))
 
+def albums(request):
+	albums = Album.objects.all().order_by('name')
+	return render_to_response('index.html',
+		{'list': albums, 'view':'album'},
+		context_instance=RequestContext(request))
+
 def artist(request,artist_id):
 	artist = Artist.objects.get(id=artist_id)
 	albums = Album.objects.filter(artist=artist)

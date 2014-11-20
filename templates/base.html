@@ -123,6 +123,10 @@ $(document).ready(function() {
         <a class='nav-link' href='{% url "home" %}'>
             <i class='glyphicon glyphicon-user'></i> Artists
         </a>
+        <a class='nav-link' href='{% url "albums" %}'>
+            <i class='glyphicon glyphicon-record'></i> Albums
+        </a>
+
         <a class='nav-link' href='{% url "playlists" %}'>
             <i class='glyphicon glyphicon-list'></i> Playlists
         </a>
@@ -153,7 +157,7 @@ $(document).ready(function() {
     </div>
     <div class="row">
       <div class="col-md-offset-8 col-md-4">
-      {% if view == 'album' %}
+      {% if view == 'album' and artist %}
       <ol class="breadcrumb pull-right">
         <li><a href="{% url 'home' %}">Home</a></li>
         <li class="active">{{ artist.name }}</li>
