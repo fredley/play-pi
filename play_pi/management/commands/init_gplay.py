@@ -34,8 +34,11 @@ class Command(BaseCommand):
         # Easier to keep track of who we've seen like this...
         artists = []
         albums = []
-
+        count = len(library)
+        self.stdout.write(str(count) + ' tracks found')
+        i = 0
         for song in library:
+            i = i + 1
             track = Track()
 
             if song['albumArtist'] == "":
@@ -57,6 +60,7 @@ class Command(BaseCommand):
                 artist.save()
                 artists.append(a)
                 self.stdout.write('Added artist: ' + a)
+                self.stdout.write(str(i) + '/' + str(count) + ' tracks completed')
             else:
                 artist = Artist.objects.get(name=a)
             track.artist = artist

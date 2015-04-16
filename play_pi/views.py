@@ -1,4 +1,4 @@
-from gmusicapi import Webclient
+from gmusicapi import Mobileclient
 import mpd
 from django.core.cache import cache
 
@@ -10,12 +10,12 @@ from django.template import RequestContext
 from django.utils import simplejson
 
 from play_pi.models import *
-from play_pi.settings import GPLAY_USER, GPLAY_PASS, SITE_ROOT
+from play_pi.settings import GPLAY_USER, GPLAY_PASS, SITE_ROOT, DEVICE_ID
 
 import logging
 logger = logging.getLogger('play_pi')
 
-api = Webclient()
+api = Mobileclient()
 api.login(GPLAY_USER,GPLAY_PASS)
 
 client = mpd.MPDClient()
@@ -92,7 +92,10 @@ def play_track(request,track_id):
 
 def stop(request):
 	client = get_client()
-	client.clear()
+	try:
+          client.clear()
+        except:
+          pass
 	client.stop()
 	return HttpResponseRedirect(reverse('home'))
 
@@ -154,20 +157,26 @@ def get_currently_playing_track():
 
 def get_gplay_url(stream_id):
 	global api
-	try:
-		url = api.get_stream_urls(stream_id)[0]
-	except:
-		api.login(GPLAY_USER,GPLAY_PASS)
-		url = api.get_stream_urls(stream_id)[0]
+        try:
+	  url = api.get_stream_url(stream_id,DEVICE_ID)
+        except:
+          api.login(GPLAY_USER,GPLAY_PASS)
+          url = api.get_stream_url(stream_id,DEVICE_ID)
 	return url
 
 def mpd_play(tracks):
 	client = get_client()
-	client.clear()
-	for track in tracks:
-		track.mpd_id = client.addid(SITE_ROOT + reverse('get_stream',args=[track.id,]))
-		track.save()
-	client.play()
+        success = False
+        while not success:
+          try:
+            client.clear()
+            for track in tracks:
+              track.mpd_id = client.addid(SITE_ROOT + reverse('get_stream',args=[track.id,]))
+              track.save()
+            client.play()
+            success = True
+          except:
+            pass
 
 def get_client():
 	global client
