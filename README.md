@@ -18,8 +18,10 @@ There are [futher instructions for setting up/testing mpc](http://www.gmpa.it/it
 `git clone git://github.com/fredley/play-pi.git`
 `cd play-pi`
 * Create a file called `local_settings.py` in the same folder as `settings.py`. Add the following lines:
-`GPLAY_USER="you@gmail.com"`
-`GPLAY_PASS="your-password"`
+`GPLAY_USER="you@gmail.com"`  
+`GPLAY_PASS="your-password"`  
+`DEVICE_ID="your-device-id`  
+To get your device ID, dial `*#*#8255#*#*` on your Android phone, or have a look on the App Store - there are many apps that will display it for you. iOS users can use their device's uuid prepended by `ios:`.
 It's highly recommended you use an [application specific password](https://support.google.com/accounts/answer/185833?hl=en) for this.
 * Now set up the Django app with the following commands. This will create the database:
 `./manage.py syncdb`
