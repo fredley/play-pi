@@ -16,7 +16,7 @@ import logging
 logger = logging.getLogger('play_pi')
 
 api = Mobileclient()
-api.login(GPLAY_USER,GPLAY_PASS)
+api.login(GPLAY_USER,GPLAY_PASS,DEVICE_ID)
 
 client = mpd.MPDClient()
 client.connect("localhost", 6600)
@@ -160,7 +160,7 @@ def get_gplay_url(stream_id):
         try:
 	  url = api.get_stream_url(stream_id,DEVICE_ID)
         except:
-          api.login(GPLAY_USER,GPLAY_PASS)
+          api.login(GPLAY_USER,GPLAY_PASS,DEVICE_ID)
           url = api.get_stream_url(stream_id,DEVICE_ID)
 	return url
 
