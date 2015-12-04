@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection
 from gmusicapi import Mobileclient, Webclient
-from play_pi.settings import GPLAY_USER, GPLAY_PASS
+from play_pi.settings import GPLAY_USER, GPLAY_PASS, DEVICE_ID
 from play_pi.models import *
 
 class Command(BaseCommand):
@@ -13,7 +13,7 @@ class Command(BaseCommand):
             return
 
         api = Mobileclient()
-        if not api.login(GPLAY_USER,GPLAY_PASS):
+        if not api.login(GPLAY_USER,GPLAY_PASS,DEVICE_ID):
             self.stdout.write('Incorrect credentials, login failed')
             return
 
