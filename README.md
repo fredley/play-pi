@@ -15,7 +15,8 @@ There are [futher instructions for setting up/testing mpc](http://www.gmpa.it/it
 * Now clone this repository:
 `git clone git://github.com/fredley/play-pi.git`
 `cd play-pi`
-* Next you'll need to use `pip` to install the required python packages:
+* First, you'll need to update `pip`'s setuptools: `sudo pip install -U setuptools`
+* Next you'll need to use it to install the required python packages:
 `sudo pip install -r requirements.txt`
 * Create a file called `local_settings.py` in the same folder as `settings.py`. Add the following lines:
 `GPLAY_USER="you@gmail.com"`  
