@@ -2,7 +2,6 @@ Django==1.5
 appdirs==1.4.0
 argparse==1.2.1
 decorator==3.4.0
-#distribute==0.6.24
 gmusicapi==7.0.0
 httplib2==0.9
 mock==1.0.1
