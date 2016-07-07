@@ -25,11 +25,13 @@ There are [futher instructions for setting up/testing mpc](http://www.gmpa.it/it
 To get your device ID, dial `*#*#8255#*#*` on your Android phone, or have a look on the App Store - there are many apps that will display it for you. iOS users can use their device's uuid prepended by `ios:`.
 It's highly recommended you use an [application specific password](https://support.google.com/accounts/answer/185833?hl=en) for this.
 * Now set up the Django app with the following commands. This will create the database:
-`./manage.py syncdb`
-During this step you will be asked for a superuser name and password. You can use these to access the admin should you want to.
+`./manage.py migrate`
 * Now sync your Google Music library. This can take a very long time, just let it run:
 `./manage.py init_gplay`
 * You're now ready to roll! Start up a screen by typing `screen`. Running the server in the screen means that it will keep running after `ssh` is disconnected. You need to use `sudo` for this command if you want to use port 80 (recommended).
 `sudo ./manage.py runserver 0.0.0.0:80`
 * You should now be able to access play-pi from your web browser, point it at the IP of your Pi. You can go to `http://192.168.pi.ip/admin` and log in with your credentials to access the admin.
 * Setting up a better web server is left as an excercise for the enthusiast. I can personally recommend [gunicorn](http://gunicorn.org/).
+
+### Migrating from previous version (Django 1.5)
+* run `./manage.py migrate --fake-initial` - this will mark initial migrations as applied nad apply any additional migrations

@@ -1,4 +1,4 @@
-Django==1.5
+django==1.8.13
 appdirs==1.4.0
 argparse==1.2.1
 decorator==3.4.0

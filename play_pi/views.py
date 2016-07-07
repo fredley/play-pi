@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils import simplejson
+import json
 
 from play_pi.models import *
 from play_pi.settings import GPLAY_USER, GPLAY_PASS, SITE_ROOT, DEVICE_ID
@@ -132,12 +132,12 @@ def ajax(request,method):
 	elif method == 'current_song':
 		track = get_currently_playing_track()
 		if track == {}:
-			return HttpResponse(simplejson.dumps({}), 'application/javascript')
+			return HttpResponse(json.dumps({}), 'application/javascript')
 		data = {'title': track.name, 'album':track.album.name, 'artist': track.artist.name, 'state': client.status()['state']}
-		return HttpResponse(simplejson.dumps(data), 'application/javascript')
+		return HttpResponse(json.dumps(data), 'application/javascript')
 	
 	return_data = client.status()
-	return HttpResponse(simplejson.dumps(return_data), 'application/javascript')
+	return HttpResponse(json.dumps(return_data), 'application/javascript')
 
 def get_currently_playing_track():
 	status = get_client().status()
