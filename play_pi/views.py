@@ -1,4 +1,5 @@
 from gmusicapi import Mobileclient
+from gmusicapi.exceptions import AlreadyLoggedIn
 import mpd
 from django.core.cache import cache
 
@@ -16,7 +17,10 @@ import logging
 logger = logging.getLogger('play_pi')
 
 api = Mobileclient()
-api.login(GPLAY_USER,GPLAY_PASS,DEVICE_ID)
+try:
+  api.login(GPLAY_USER,GPLAY_PASS,DEVICE_ID)
+except AlreadyLoggedIn:
+  pass
 
 client = mpd.MPDClient()
 client.connect("localhost", 6600)
