@@ -13,7 +13,7 @@ pyasn1==0.1.7
 pyasn1-modules==0.0.5
 python-dateutil==2.2
 python-mpd2==0.5.3
-requests==2.4.3
+requests==2.20.0
 rsa==3.1.4
 six==1.8.0
 validictory==1.0.0a2
