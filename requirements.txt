@@ -1,4 +1,4 @@
-django==1.11.28
+django==1.11.29
 appdirs==1.4.0
 argparse==1.2.1
 decorator==3.4.0
